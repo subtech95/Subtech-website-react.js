@@ -1,27 +1,17 @@
-import Image from "next/image";
+"use client";
+
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function Footer() {
   return (
-    <footer className="bg-black text-white pt-20 pb-10 border-t border-gray-subtle/10">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-          {/* Brand Column */}
-          <div>
-            <div className="h-[36px] relative w-[140px] mb-6">
-              <Image
-                src="/logos/white.svg"
-                alt="Subtech Industrial Power Logo"
-                fill
-                className="object-contain object-left"
-              />
-            </div>
-            <p className="text-gray-muted text-[16px] leading-[1.7] mb-6">
-              Industrial Power. Engineered for India. Protecting motors and machines since 1998.
-            </p>
-          </div>
+    <footer className="bg-[#0D0D0D] text-white pt-0 pb-10">
+      {/* Red separator at very top */}
+      <div className="h-[2px] bg-[#CC0000] w-full" />
 
-          {/* Links Columns */}
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-20">
+        {/* Four columns */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-16">
           <div>
             <h4 className="font-semibold text-[18px] mb-6">Products</h4>
             <ul className="space-y-4 text-gray-muted text-[15px]">
@@ -43,17 +33,53 @@ export default function Footer() {
           </div>
 
           <div>
+            <h4 className="font-semibold text-[18px] mb-6">Resources</h4>
+            <ul className="space-y-4 text-gray-muted text-[15px]">
+              <li><Link href="/products" className="hover:text-red-500 transition-colors">Product Catalog</Link></li>
+              <li><Link href="/about" className="hover:text-red-500 transition-colors">Case Studies</Link></li>
+              <li><Link href="/contact" className="hover:text-red-500 transition-colors">Get Support</Link></li>
+              <li><Link href="/contact" className="hover:text-red-500 transition-colors">Dealer Enquiry</Link></li>
+            </ul>
+          </div>
+
+          <div>
             <h4 className="font-semibold text-[18px] mb-6">Contact</h4>
             <address className="not-italic space-y-4 text-gray-muted text-[15px]">
-              <p>Subtech, Plot No X, Sector Y,<br />Faridabad, Haryana, India</p>
+              <p>Subtech, Greater Noida,<br />Uttar Pradesh, India</p>
               <p><a href="tel:+910000000000" className="hover:text-white transition-colors">+91-0000000000</a></p>
               <p><a href="mailto:info@subtech.in" className="hover:text-white transition-colors">info@subtech.in</a></p>
             </address>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-8 border-t border-gray-subtle/10 flex flex-col md:flex-row justify-between items-center gap-4">
+        {/* Gray separator */}
+        <div className="h-px bg-white/10 w-full" />
+
+        {/* Massive Subtech text */}
+        <div className="w-full overflow-hidden py-10">
+          <motion.div
+            className="group cursor-default select-none text-center"
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
+          >
+            <p
+              className="text-white font-bold leading-none tracking-[-4px] transition-all duration-[400ms] ease-in-out group-hover:[text-shadow:0_0_80px_rgba(204,0,0,0.3)]"
+              style={{
+                fontSize: "clamp(80px, 15vw, 220px)",
+              }}
+            >
+              Subtech
+            </p>
+            <p className="text-[13px] text-[#888888] uppercase tracking-[2px] mt-4 font-light">
+              Est. 1998 — Greater Noida, India
+            </p>
+          </motion.div>
+        </div>
+
+        {/* Bottom copyright bar */}
+        <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-gray-muted text-[14px]">
             &copy; {new Date().getFullYear()} Subtech. All rights reserved.
           </p>

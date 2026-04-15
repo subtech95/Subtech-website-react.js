@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -44,14 +43,10 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between">
-        <Link href="/" className="relative z-10 block h-[36px] w-[140px]">
-          <Image
-            src="/logos/white.svg"
-            alt="Subtech Industrial Motor Protection Panels"
-            fill
-            className="object-contain object-left"
-            priority
-          />
+        <Link href="/" className="relative z-10 flex items-center h-[36px]">
+          <span className="text-white font-bold text-[20px] tracking-tight">
+            Subtech
+          </span>
         </Link>
 
         {/* Desktop Nav */}

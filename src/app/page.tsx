@@ -5,6 +5,8 @@ import ScrollExpandMedia from "@/components/blocks/scroll-expansion-hero";
 import StatsBar from "@/components/home/StatsBar";
 import ProductsGrid from "@/components/home/ProductsGrid";
 import TechnologySection from "@/components/home/TechnologySection";
+import TestimonialsSection from "@/components/home/TestimonialsSection";
+import CTASection from "@/components/home/CTASection";
 
 export default function Home() {
   return (
@@ -71,6 +73,8 @@ export default function Home() {
       <StatsBar />
       <ProductsGrid />
       <TechnologySection />
+      <TestimonialsSection />
+      <CTASection />
     </>
   );
 }

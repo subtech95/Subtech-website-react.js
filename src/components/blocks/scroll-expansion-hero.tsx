@@ -55,7 +55,7 @@ const ScrollExpandMedia = ({
         e.preventDefault();
       } else if (!mediaFullyExpanded) {
         e.preventDefault();
-        const scrollDelta = e.deltaY * 0.002;
+        const scrollDelta = e.deltaY * 0.0005;
         const newProgress = Math.min(
           Math.max(scrollProgress + scrollDelta, 0),
           1
@@ -198,47 +198,38 @@ const ScrollExpandMedia = ({
             <div className="flex flex-col items-center justify-center w-full h-[100dvh] relative">
               {/* Expanding Media Container */}
               <div
-                className="absolute z-0 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-none rounded-2xl"
+                className="absolute z-0 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-2xl"
                 style={{
                   width: `${mediaWidth}px`,
                   height: `${mediaHeight}px`,
                   maxWidth: "95vw",
                   maxHeight: "85vh",
                   boxShadow: "0px 0px 50px rgba(0, 0, 0, 0.3)",
+                  transition: "width 0.4s ease, height 0.4s ease",
                 }}
               >
                 {mediaType === "video" ? (
                   mediaSrc.includes("youtube.com") ? (
-                    <div className="relative w-full h-full pointer-events-none">
-                      <iframe
-                        width="100%"
-                        height="100%"
-                        src={
-                          mediaSrc.includes("embed")
-                            ? mediaSrc +
-                              (mediaSrc.includes("?") ? "&" : "?") +
-                              "autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&disablekb=1&modestbranding=1"
-                            : mediaSrc.replace("watch?v=", "embed/") +
-                              "?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&disablekb=1&modestbranding=1&playlist=" +
-                              mediaSrc.split("v=")[1]
-                        }
-                        className="w-full h-full rounded-xl"
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                        title="Subtech industrial automation video"
-                      />
-                      <div
-                        className="absolute inset-0 z-10"
-                        style={{ pointerEvents: "none" }}
-                      />
-                      <motion.div
-                        className="absolute inset-0 bg-[#0D0D0D]/30 rounded-xl"
-                        initial={{ opacity: 0.7 }}
-                        animate={{ opacity: 0.5 - scrollProgress * 0.3 }}
-                        transition={{ duration: 0.2 }}
-                      />
-                    </div>
+                    (() => {
+                      const videoId = mediaSrc.includes("embed")
+                        ? mediaSrc.split("embed/")[1]?.split("?")[0]
+                        : mediaSrc.split("v=")[1]?.split("&")[0];
+                      const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&modestbranding=1&playlist=${videoId}`;
+                      return (
+                        <div className="relative w-full h-full pointer-events-none overflow-hidden rounded-xl">
+                          <iframe
+                            width="100%"
+                            height="100%"
+                            src={embedUrl}
+                            className="absolute inset-0 w-full h-full rounded-xl"
+                            style={{ border: "none" }}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            title="Subtech industrial automation video"
+                          />
+                        </div>
+                      );
+                    })()
                   ) : (
                     <div className="relative w-full h-full z-20">
                       <video
@@ -285,6 +276,7 @@ const ScrollExpandMedia = ({
                       className="text-2xl text-[#CC0000] font-sans"
                       style={{
                         transform: `translateX(-${textTranslateX}vw)`,
+                        transition: "transform 0.4s ease",
                       }}
                     >
                       {date}
@@ -295,6 +287,7 @@ const ScrollExpandMedia = ({
                       className="text-[#CC0000] font-medium text-center font-sans"
                       style={{
                         transform: `translateX(${textTranslateX}vw)`,
+                        transition: "transform 0.4s ease",
                       }}
                     >
                       {scrollToExpand}
@@ -310,17 +303,19 @@ const ScrollExpandMedia = ({
                 }`}
               >
                 <h1
-                  className="text-4xl md:text-5xl lg:text-[72px] font-bold text-white transition-none font-sans leading-[1.1] tracking-[-2px]"
+                  className="text-4xl md:text-5xl lg:text-[72px] font-bold text-white font-sans leading-[1.1] tracking-[-2px]"
                   style={{
                     transform: `translateX(-${textTranslateX}vw)`,
+                    transition: "transform 0.4s ease",
                   }}
                 >
                   {firstWord}
                 </h1>
                 <h1
-                  className="text-4xl md:text-5xl lg:text-[72px] font-bold text-center text-white transition-none font-sans leading-[1.1] tracking-[-2px]"
+                  className="text-4xl md:text-5xl lg:text-[72px] font-bold text-center text-white font-sans leading-[1.1] tracking-[-2px]"
                   style={{
                     transform: `translateX(${textTranslateX}vw)`,
+                    transition: "transform 0.4s ease",
                   }}
                 >
                   {restOfTitle}

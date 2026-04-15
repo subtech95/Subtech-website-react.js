@@ -32,6 +32,10 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-dm-sans)", "sans-serif"],
       },
+      animation: {
+        marquee: "marquee var(--duration) infinite linear",
+        "marquee-vertical": "marquee-vertical var(--duration) linear infinite",
+      },
     },
   },
   plugins: [],
