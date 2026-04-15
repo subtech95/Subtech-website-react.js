@@ -1,101 +1,76 @@
-import Image from "next/image";
+"use client";
+
+import Link from "next/link";
+import ScrollExpandMedia from "@/components/blocks/scroll-expansion-hero";
+import StatsBar from "@/components/home/StatsBar";
+import ProductsGrid from "@/components/home/ProductsGrid";
+import TechnologySection from "@/components/home/TechnologySection";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <>
+      {/* Hero — ScrollExpandMedia */}
+      <ScrollExpandMedia
+        mediaType="video"
+        mediaSrc="https://www.youtube.com/watch?v=oFuWT0fFyhw"
+        bgImageSrc="https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=2000&q=80"
+        title="Industrial Power Engineered for India"
+        date="Est. 1998 — Greater Noida"
+        scrollToExpand="Scroll to explore Subtech"
+        textBlend={true}
+      >
+        {/* Content revealed after video expands */}
+        <div className="max-w-7xl mx-auto w-full">
+          {/* Heading */}
+          <h2 className="text-3xl md:text-[48px] font-semibold text-white text-center mb-6 leading-[1.2] tracking-[-1px]">
+            Trusted by India&apos;s Largest Organizations
+          </h2>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          {/* Description */}
+          <p className="text-lg text-white/70 text-center max-w-3xl mx-auto mb-12 leading-[1.7]">
+            Powering critical infrastructure for GAIL, NTPC, DMRC, Indian
+            Railways, Indian Air Force and 220+ dealers across India. Our
+            panels protect the machines that keep the nation running.
+          </p>
+
+          {/* Stats Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12">
+            {[
+              { value: "Rs 22 Cr", label: "Revenue" },
+              { value: "220+", label: "Dealers" },
+              { value: "25+", label: "Years" },
+              { value: "10,000+", label: "Panels Installed" },
+            ].map((stat) => (
+              <div
+                key={stat.label}
+                className="bg-[#1A1A1A] border border-white/10 rounded-xl p-6 text-center"
+              >
+                <p className="text-2xl md:text-3xl font-bold text-white mb-1">
+                  {stat.value}
+                </p>
+                <p className="text-sm text-white/50 uppercase tracking-[2px]">
+                  {stat.label}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* CTA */}
+          <div className="flex justify-center">
+            <Link
+              href="/contact"
+              className="inline-block bg-[#CC0000] hover:bg-[#AA0000] text-white font-medium px-8 py-4 rounded-lg transition-colors duration-200 text-lg"
+            >
+              Get Quote
+            </Link>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </ScrollExpandMedia>
+
+      {/* Remaining homepage sections */}
+      <StatsBar />
+      <ProductsGrid />
+      <TechnologySection />
+    </>
   );
 }

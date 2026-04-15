@@ -1,36 +1,124 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Subtech Website — earth.subtech.in
 
-## Getting Started
+Industrial electrical automation website for Subtech. Built with Next.js 14, TypeScript, Tailwind CSS, and Framer Motion.
 
-First, run the development server:
+## Local Development
 
 ```bash
+npm install --legacy-peer-deps
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Production Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build:prod
+npm run start:prod
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Deployment to earth.subtech.in
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 1. SSH into the server
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+ssh user@<SERVER_IP>
+cd /var/www/subtech-earth
+```
 
-## Deploy on Vercel
+### 2. Run the deploy script
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+bash deploy.sh
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 3. Verify
+
+```bash
+pm2 status
+pm2 logs subtech-earth-website
+```
+
+---
+
+## Server Setup (First Time Only)
+
+### Prerequisites on the server
+
+```bash
+# Install Node.js 18+
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt install -y nodejs
+
+# Install PM2
+sudo npm install -g pm2
+
+# Install Nginx
+sudo apt install -y nginx
+
+# Install Certbot
+sudo apt install -y certbot python3-certbot-nginx
+```
+
+### Clone and deploy
+
+```bash
+cd /var/www
+git clone <REPO_URL> subtech-earth
+cd subtech-earth
+bash deploy.sh
+```
+
+---
+
+## DNS Setup (Neeraj)
+
+Add a DNS **A record** for `earth.subtech.in` pointing to the server IP address.
+
+## Nginx Setup (Neeraj)
+
+```bash
+# Copy the nginx config
+sudo cp nginx.conf /etc/nginx/sites-available/earth.subtech.in
+
+# Create symlink to enable the site
+sudo ln -s /etc/nginx/sites-available/earth.subtech.in /etc/nginx/sites-enabled/
+
+# Test nginx configuration
+sudo nginx -t
+
+# Reload nginx
+sudo systemctl reload nginx
+```
+
+## SSL Certificate (After DNS is live)
+
+```bash
+sudo certbot --nginx -d earth.subtech.in
+```
+
+This will automatically configure HTTPS with a free Let's Encrypt certificate that auto-renews.
+
+---
+
+## Environment Variables
+
+Create `.env.production` on the server:
+
+```
+NEXT_PUBLIC_CRM_URL=https://crm.subtech.in
+NEXT_PUBLIC_SITE_URL=https://earth.subtech.in
+```
+
+## Useful Commands
+
+| Command | Description |
+|---------|-------------|
+| `pm2 status` | Check if the site is running |
+| `pm2 logs subtech-earth-website` | View live logs |
+| `pm2 restart subtech-earth-website` | Restart the site |
+| `pm2 stop subtech-earth-website` | Stop the site |
+| `bash deploy.sh` | Full redeploy |
