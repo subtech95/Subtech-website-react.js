@@ -53,16 +53,16 @@ const col4 = [...testimonials.slice(0, 1), ...testimonials.slice(3, 4)];
 
 function TestimonialCard({ name, company, body }: (typeof testimonials)[0]) {
   return (
-    <Card className="bg-[#1A1A1A] border-0 border-l-2 border-l-[#CC0000] rounded-xl mx-2 my-2 w-[280px] shrink-0">
-      <CardContent className="p-5">
-        <p className="text-white/80 text-sm leading-relaxed mb-4">{body}</p>
+    <Card className="bg-[#1A1A1A] border-0 border-l-[3px] border-l-[#CC0000] rounded-xl mx-2 my-3 min-w-[280px] shrink-0">
+      <CardContent className="p-6">
+        <p className="text-white/80 text-[15px] leading-[1.7] mb-5">{body}</p>
         <div className="flex items-center gap-3">
-          <Avatar className="h-9 w-9">
-            <AvatarFallback>{getInitials(name)}</AvatarFallback>
+          <Avatar className="h-12 w-12">
+            <AvatarFallback className="text-[18px] font-bold">{getInitials(name)}</AvatarFallback>
           </Avatar>
           <div>
-            <p className="text-white text-sm font-medium">{name}</p>
-            <p className="text-white/40 text-xs">{company}</p>
+            <p className="text-white text-[18px] font-semibold">{name}</p>
+            <p className="text-[#CC0000] text-[14px]">{company}</p>
           </div>
         </div>
       </CardContent>
@@ -83,34 +83,34 @@ export default function TestimonialsSection() {
       </div>
 
       <div
-        className="relative h-[500px] overflow-hidden"
+        className="relative h-[600px] overflow-hidden w-full"
         style={{
           perspective: "800px",
         }}
       >
         <div
-          className="flex gap-4 justify-center"
+          className="flex gap-6 justify-center w-full"
           style={{
             transform:
               "translateX(-100px) translateY(0px) translateZ(-100px) rotateX(20deg) rotateY(-10deg) rotateZ(20deg)",
           }}
         >
-          <Marquee vertical pauseOnHover className="[--duration:25s]">
+          <Marquee vertical pauseOnHover className="[--duration:20s] flex-1">
             {col1.map((t) => (
               <TestimonialCard key={t.name} {...t} />
             ))}
           </Marquee>
-          <Marquee vertical reverse pauseOnHover className="[--duration:30s]">
+          <Marquee vertical reverse pauseOnHover className="[--duration:24s] flex-1">
             {col2.map((t) => (
               <TestimonialCard key={t.name} {...t} />
             ))}
           </Marquee>
-          <Marquee vertical pauseOnHover className="[--duration:28s]">
+          <Marquee vertical pauseOnHover className="[--duration:22s] flex-1">
             {col3.map((t) => (
               <TestimonialCard key={t.name} {...t} />
             ))}
           </Marquee>
-          <Marquee vertical reverse pauseOnHover className="[--duration:32s] hidden md:flex">
+          <Marquee vertical reverse pauseOnHover className="[--duration:26s] flex-1 hidden md:flex">
             {col4.map((t) => (
               <TestimonialCard key={t.name} {...t} />
             ))}

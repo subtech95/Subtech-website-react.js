@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { SparklesCore } from "@/components/ui/sparkles";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#0D0D0D] text-white pt-0 pb-10">
+    <footer className="bg-[#0D0D0D] text-white pt-0 pb-0">
       {/* Red separator at very top */}
       <div className="h-[2px] bg-[#CC0000] w-full" />
 
@@ -54,9 +55,37 @@ export default function Footer() {
 
         {/* Gray separator */}
         <div className="h-px bg-white/10 w-full" />
+      </div>
 
-        {/* Massive Subtech text */}
-        <div className="w-full overflow-hidden py-10">
+      {/* Sparkles + Massive Subtech text */}
+      <div className="relative w-full overflow-hidden min-h-[300px] flex flex-col items-center justify-center">
+        {/* Sparkles background */}
+        <SparklesCore
+          background="transparent"
+          minSize={0.4}
+          maxSize={1.2}
+          particleDensity={80}
+          particleColor="#CC0000"
+          speed={0.8}
+          className="w-full h-full absolute inset-0"
+        />
+
+        {/* Gradient lines above text */}
+        <div className="relative z-20 flex flex-col items-center w-full">
+          <div
+            className="h-px w-[60%] mb-2"
+            style={{
+              background: "linear-gradient(to right, transparent, #CC0000, transparent)",
+            }}
+          />
+          <div
+            className="h-[3px] w-[40%] blur-sm mb-8"
+            style={{
+              background: "linear-gradient(to right, transparent, #CC0000, transparent)",
+            }}
+          />
+
+          {/* Massive text */}
           <motion.div
             className="group cursor-default select-none text-center"
             initial={{ opacity: 0, y: 60 }}
@@ -65,21 +94,24 @@ export default function Footer() {
             transition={{ duration: 1.2, ease: "easeOut" }}
           >
             <p
-              className="text-white font-bold leading-none tracking-[-4px] transition-all duration-[400ms] ease-in-out group-hover:[text-shadow:0_0_80px_rgba(204,0,0,0.3)]"
+              className="text-white font-light leading-none tracking-[-3px] transition-all duration-[400ms] ease-in-out group-hover:[text-shadow:0_0_80px_rgba(204,0,0,0.3)]"
               style={{
-                fontSize: "clamp(80px, 15vw, 220px)",
+                fontSize: "clamp(80px, 14vw, 200px)",
+                fontFamily: "var(--font-cormorant), serif",
               }}
             >
               Subtech
             </p>
-            <p className="text-[13px] text-[#888888] uppercase tracking-[2px] mt-4 font-light">
+            <p className="text-[13px] text-[#888888] uppercase tracking-[3px] mt-4 font-light">
               Est. 1998 — Greater Noida, India
             </p>
           </motion.div>
         </div>
+      </div>
 
-        {/* Bottom copyright bar */}
-        <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+      {/* Bottom copyright bar */}
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="py-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-gray-muted text-[14px]">
             &copy; {new Date().getFullYear()} Subtech. All rights reserved.
           </p>
