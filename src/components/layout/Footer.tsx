@@ -58,32 +58,32 @@ export default function Footer() {
       </div>
 
       {/* Sparkles + Massive Subtech text */}
-      <div className="relative w-full overflow-hidden min-h-[300px] flex flex-col items-center justify-center">
-        {/* Sparkles background */}
-        <SparklesCore
-          background="transparent"
-          minSize={0.4}
-          maxSize={1.2}
-          particleDensity={80}
-          particleColor="#CC0000"
-          speed={0.8}
-          className="w-full h-full absolute inset-0"
-        />
+      <div className="relative w-full overflow-hidden min-h-[300px] flex flex-col items-center justify-center py-16">
+        {/* Full-area sparkles background */}
+        <div className="w-full absolute inset-0 h-full">
+          <SparklesCore
+            id="subtechFooterSparkles"
+            background="transparent"
+            minSize={0.4}
+            maxSize={1.2}
+            particleDensity={80}
+            particleColor="#CC0000"
+            speed={0.8}
+            className="w-full h-full"
+          />
+        </div>
 
-        {/* Gradient lines above text */}
+        {/* Gradient lines + text on top */}
         <div className="relative z-20 flex flex-col items-center w-full">
-          <div
-            className="h-px w-[60%] mb-2"
-            style={{
-              background: "linear-gradient(to right, transparent, #CC0000, transparent)",
-            }}
-          />
-          <div
-            className="h-[3px] w-[40%] blur-sm mb-8"
-            style={{
-              background: "linear-gradient(to right, transparent, #CC0000, transparent)",
-            }}
-          />
+          {/* Gradient lines */}
+          <div className="w-[40rem] max-w-[90vw] h-10 relative mb-4">
+            <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-[#CC0000] to-transparent h-[2px] w-3/4 blur-sm" />
+            <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-[#CC0000] to-transparent h-px w-3/4" />
+            <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-[#CC0000] to-transparent h-[5px] w-1/4 blur-sm" />
+            <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-[#CC0000] to-transparent h-px w-1/4" />
+            {/* Radial mask to soften edges */}
+            <div className="absolute inset-0 w-full h-full bg-[#0D0D0D] [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]" />
+          </div>
 
           {/* Massive text */}
           <motion.div
