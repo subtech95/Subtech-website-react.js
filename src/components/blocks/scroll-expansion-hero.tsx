@@ -5,6 +5,7 @@ import {
   useEffect,
   useRef,
   useState,
+  useCallback,
   ReactNode,
 } from "react";
 import { motion } from "framer-motion";
@@ -34,111 +35,148 @@ const ScrollExpandMedia = ({
   children,
   onExpansionComplete,
 }: ScrollExpandMediaProps) => {
-  const [scrollProgress, setScrollProgress] = useState<number>(0);
   const [showContent, setShowContent] = useState<boolean>(false);
-  const [mediaFullyExpanded, setMediaFullyExpanded] = useState<boolean>(false);
-  const [touchStartY, setTouchStartY] = useState<number>(0);
-  const [isMobileState, setIsMobileState] = useState<boolean>(false);
+  const [, setIsMobileState] = useState<boolean>(false);
 
   const sectionRef = useRef<HTMLDivElement | null>(null);
+  const mediaContainerRef = useRef<HTMLDivElement | null>(null);
+  const titleLeftRef = useRef<HTMLHeadingElement | null>(null);
+  const titleRightRef = useRef<HTMLHeadingElement | null>(null);
+  const dateLabelRef = useRef<HTMLParagraphElement | null>(null);
+  const scrollLabelRef = useRef<HTMLParagraphElement | null>(null);
+  const bgOverlayRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    setScrollProgress(0);
-    setShowContent(false);
-    setMediaFullyExpanded(false);
+  // Use refs for scroll state to avoid re-renders and listener re-registration
+  const rawProgressRef = useRef<number>(0);
+  const mediaFullyExpandedRef = useRef<boolean>(false);
+  const touchStartYRef = useRef<number>(0);
+  const isMobileRef = useRef<boolean>(false);
+  const rafIdRef = useRef<number>(0);
+  const onExpansionCompleteRef = useRef(onExpansionComplete);
+  onExpansionCompleteRef.current = onExpansionComplete;
+
+  // Smoothly interpolated progress for rendering
+  const displayProgressRef = useRef<number>(0);
+
+  // Apply visual updates directly to DOM (no React re-render needed)
+  const applyVisuals = useCallback(() => {
+    const target = rawProgressRef.current;
+    const current = displayProgressRef.current;
+
+    // Lerp for silky smooth interpolation
+    const lerped = current + (target - current) * 0.15;
+    // Snap to target when very close to avoid endless tiny updates
+    const progress = Math.abs(target - lerped) < 0.001 ? target : lerped;
+    displayProgressRef.current = progress;
+
+    // Apply smoothstep easing for visual output
+    const eased = progress * progress * (3 - 2 * progress);
+
+    const mobile = isMobileRef.current;
+    const mediaWidth = 300 + eased * (mobile ? 650 : 1250);
+    const mediaHeight = 400 + eased * (mobile ? 200 : 400);
+    const textTranslateX = eased * (mobile ? 120 : 100);
+
+    if (mediaContainerRef.current) {
+      mediaContainerRef.current.style.width = `${mediaWidth}px`;
+      mediaContainerRef.current.style.height = `${mediaHeight}px`;
+    }
+    if (titleLeftRef.current) {
+      titleLeftRef.current.style.transform = `translateX(-${textTranslateX}vw)`;
+    }
+    if (titleRightRef.current) {
+      titleRightRef.current.style.transform = `translateX(${textTranslateX}vw)`;
+    }
+    if (dateLabelRef.current) {
+      dateLabelRef.current.style.transform = `translateX(-${textTranslateX}vw)`;
+    }
+    if (scrollLabelRef.current) {
+      scrollLabelRef.current.style.transform = `translateX(${textTranslateX}vw)`;
+    }
+    if (bgOverlayRef.current) {
+      bgOverlayRef.current.style.opacity = `${1 - eased}`;
+    }
+
+    // Keep animating if we haven't reached the target yet
+    if (Math.abs(target - progress) > 0.0005) {
+      rafIdRef.current = requestAnimationFrame(applyVisuals);
+    }
   }, []);
 
+  const scheduleUpdate = useCallback(() => {
+    cancelAnimationFrame(rafIdRef.current);
+    rafIdRef.current = requestAnimationFrame(applyVisuals);
+  }, [applyVisuals]);
+
+  // Update raw progress and kick off smooth animation
+  const updateProgress = useCallback((newRawProgress: number) => {
+    const clamped = Math.min(Math.max(newRawProgress, 0), 1);
+    rawProgressRef.current = clamped;
+
+    if (clamped >= 1) {
+      mediaFullyExpandedRef.current = true;
+      setShowContent(true);
+      if (onExpansionCompleteRef.current) {
+        setTimeout(() => {
+          onExpansionCompleteRef.current?.();
+        }, 1000);
+      }
+    } else if (clamped < 0.75) {
+      setShowContent(false);
+    }
+
+    scheduleUpdate();
+  }, [scheduleUpdate]);
+
+  // Event listeners registered once, using refs for state
   useEffect(() => {
     const handleWheel = (e: globalThis.WheelEvent) => {
-      if (mediaFullyExpanded && e.deltaY < 0 && window.scrollY <= 5) {
-        setMediaFullyExpanded(false);
+      if (mediaFullyExpandedRef.current && e.deltaY < 0 && window.scrollY <= 5) {
+        mediaFullyExpandedRef.current = false;
         e.preventDefault();
-      } else if (!mediaFullyExpanded) {
+      } else if (!mediaFullyExpandedRef.current) {
         e.preventDefault();
         const scrollDelta = e.deltaY * 0.0005;
-        const newProgress = Math.min(
-          Math.max(scrollProgress + scrollDelta, 0),
-          1
-        );
-        const easedProgress =
-          newProgress * newProgress * (3 - 2 * newProgress);
-        setScrollProgress(easedProgress);
-
-        if (newProgress >= 1) {
-          setMediaFullyExpanded(true);
-          setShowContent(true);
-
-          if (onExpansionComplete) {
-            setTimeout(() => {
-              onExpansionComplete();
-            }, 1000);
-          }
-        } else if (newProgress < 0.75) {
-          setShowContent(false);
-        }
+        updateProgress(rawProgressRef.current + scrollDelta);
       }
     };
 
     const handleTouchStart = (e: globalThis.TouchEvent) => {
-      setTouchStartY(e.touches[0].clientY);
+      touchStartYRef.current = e.touches[0].clientY;
     };
 
     const handleTouchMove = (e: globalThis.TouchEvent) => {
-      if (!touchStartY) return;
+      if (!touchStartYRef.current) return;
 
       const touchY = e.touches[0].clientY;
-      const deltaY = touchStartY - touchY;
+      const deltaY = touchStartYRef.current - touchY;
 
-      if (mediaFullyExpanded && deltaY < -20 && window.scrollY <= 5) {
-        setMediaFullyExpanded(false);
+      if (mediaFullyExpandedRef.current && deltaY < -20 && window.scrollY <= 5) {
+        mediaFullyExpandedRef.current = false;
         e.preventDefault();
-      } else if (!mediaFullyExpanded) {
+      } else if (!mediaFullyExpandedRef.current) {
         e.preventDefault();
         const scrollFactor = deltaY < 0 ? 0.02 : 0.015;
         const scrollDelta = deltaY * scrollFactor;
-        const newProgress = Math.min(
-          Math.max(scrollProgress + scrollDelta, 0),
-          1
-        );
-        const easedProgress =
-          newProgress * newProgress * (3 - 2 * newProgress);
-        setScrollProgress(easedProgress);
-
-        if (newProgress >= 1) {
-          setMediaFullyExpanded(true);
-          setShowContent(true);
-
-          if (onExpansionComplete) {
-            setTimeout(() => {
-              onExpansionComplete();
-            }, 1000);
-          }
-        } else if (newProgress < 0.75) {
-          setShowContent(false);
-        }
-
-        setTouchStartY(touchY);
+        updateProgress(rawProgressRef.current + scrollDelta);
+        touchStartYRef.current = touchY;
       }
     };
 
     const handleTouchEnd = (): void => {
-      setTouchStartY(0);
+      touchStartYRef.current = 0;
     };
 
     const handleScroll = (): void => {
-      if (!mediaFullyExpanded) {
+      if (!mediaFullyExpandedRef.current) {
         window.scrollTo(0, 0);
       }
     };
 
     window.addEventListener("wheel", handleWheel, { passive: false });
     window.addEventListener("scroll", handleScroll);
-    window.addEventListener("touchstart", handleTouchStart, {
-      passive: false,
-    });
-    window.addEventListener("touchmove", handleTouchMove, {
-      passive: false,
-    });
+    window.addEventListener("touchstart", handleTouchStart, { passive: false });
+    window.addEventListener("touchmove", handleTouchMove, { passive: false });
     window.addEventListener("touchend", handleTouchEnd);
 
     return () => {
@@ -147,12 +185,15 @@ const ScrollExpandMedia = ({
       window.removeEventListener("touchstart", handleTouchStart);
       window.removeEventListener("touchmove", handleTouchMove);
       window.removeEventListener("touchend", handleTouchEnd);
+      cancelAnimationFrame(rafIdRef.current);
     };
-  }, [scrollProgress, mediaFullyExpanded, touchStartY, onExpansionComplete]);
+  }, [updateProgress]);
 
   useEffect(() => {
     const checkIfMobile = (): void => {
-      setIsMobileState(window.innerWidth < 768);
+      const mobile = window.innerWidth < 768;
+      isMobileRef.current = mobile;
+      setIsMobileState(mobile);
     };
 
     checkIfMobile();
@@ -161,26 +202,20 @@ const ScrollExpandMedia = ({
     return () => window.removeEventListener("resize", checkIfMobile);
   }, []);
 
-  const mediaWidth = 300 + scrollProgress * (isMobileState ? 650 : 1250);
-  const mediaHeight = 400 + scrollProgress * (isMobileState ? 200 : 400);
-  const textTranslateX = scrollProgress * (isMobileState ? 120 : 100);
-
   const firstWord = title ? title.split(" ")[0] : "";
   const restOfTitle = title ? title.split(" ").slice(1).join(" ") : "";
 
   return (
     <div
       ref={sectionRef}
-      className="transition-colors duration-700 ease-in-out overflow-x-hidden"
+      className="overflow-x-hidden"
     >
       <section className="relative flex flex-col items-center justify-start min-h-[100dvh]">
         <div className="relative w-full flex flex-col items-center min-h-[100dvh]">
           {/* Background Image */}
-          <motion.div
-            className="absolute inset-0 z-0 h-full"
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 1 - scrollProgress }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
+          <div
+            ref={bgOverlayRef}
+            className="absolute inset-0 z-0 h-full will-change-[opacity]"
           >
             <img
               src={bgImageSrc}
@@ -192,20 +227,20 @@ const ScrollExpandMedia = ({
               }}
             />
             <div className="absolute inset-0 bg-[#0D0D0D]/70" />
-          </motion.div>
+          </div>
 
           <div className="container mx-auto flex flex-col items-center justify-start relative z-10">
             <div className="flex flex-col items-center justify-center w-full h-[100dvh] relative">
               {/* Expanding Media Container */}
               <div
-                className="absolute z-0 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-2xl"
+                ref={mediaContainerRef}
+                className="absolute z-0 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl will-change-[width,height]"
                 style={{
-                  width: `${mediaWidth}px`,
-                  height: `${mediaHeight}px`,
+                  width: "300px",
+                  height: "400px",
                   maxWidth: "95vw",
                   maxHeight: "85vh",
                   boxShadow: "0px 0px 50px rgba(0, 0, 0, 0.3)",
-                  transition: "width 0.4s ease, height 0.4s ease",
                 }}
               >
                 {mediaType === "video" ? (
@@ -214,7 +249,7 @@ const ScrollExpandMedia = ({
                       const videoId = mediaSrc.includes("embed")
                         ? mediaSrc.split("embed/")[1]?.split("?")[0]
                         : mediaSrc.split("v=")[1]?.split("&")[0];
-                      const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&modestbranding=1&playlist=${videoId}`;
+                      const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&modestbranding=1&playlist=${videoId}&vq=hd1080&hd=1&quality=hd1080`;
                       return (
                         <div className="relative w-full h-full pointer-events-none overflow-hidden rounded-xl">
                           <iframe
@@ -245,12 +280,6 @@ const ScrollExpandMedia = ({
                         disablePictureInPicture
                         disableRemotePlayback
                       />
-                      <motion.div
-                        className="absolute inset-0 bg-[#0D0D0D]/30 rounded-xl"
-                        initial={{ opacity: 0.7 }}
-                        animate={{ opacity: 0.5 - scrollProgress * 0.3 }}
-                        transition={{ duration: 0.2 }}
-                      />
                     </div>
                   )
                 ) : (
@@ -260,35 +289,23 @@ const ScrollExpandMedia = ({
                       alt={title || "Media content"}
                       className="w-full h-full object-cover rounded-xl"
                     />
-                    <motion.div
-                      className="absolute inset-0 bg-[#0D0D0D]/50 rounded-xl"
-                      initial={{ opacity: 0.7 }}
-                      animate={{ opacity: 0.7 - scrollProgress * 0.3 }}
-                      transition={{ duration: 0.2 }}
-                    />
                   </div>
                 )}
 
                 {/* Date & Scroll Text */}
-                <div className="flex flex-col items-center text-center relative z-10 mt-4 transition-none">
+                <div className="flex flex-col items-center text-center relative z-10 mt-4">
                   {date && (
                     <p
-                      className="text-2xl text-[#CC0000] font-sans"
-                      style={{
-                        transform: `translateX(-${textTranslateX}vw)`,
-                        transition: "transform 0.4s ease",
-                      }}
+                      ref={dateLabelRef}
+                      className="text-2xl text-[#CC0000] font-sans will-change-transform"
                     >
                       {date}
                     </p>
                   )}
                   {scrollToExpand && (
                     <p
-                      className="text-[#CC0000] font-medium text-center font-sans"
-                      style={{
-                        transform: `translateX(${textTranslateX}vw)`,
-                        transition: "transform 0.4s ease",
-                      }}
+                      ref={scrollLabelRef}
+                      className="text-[#CC0000] font-medium text-center font-sans will-change-transform"
                     >
                       {scrollToExpand}
                     </p>
@@ -298,25 +315,19 @@ const ScrollExpandMedia = ({
 
               {/* Title Text (split into two halves) */}
               <div
-                className={`flex items-center justify-center text-center gap-4 w-full relative z-10 transition-none flex-col ${
+                className={`flex items-center justify-center text-center gap-4 w-full relative z-10 flex-col ${
                   textBlend ? "mix-blend-difference" : "mix-blend-normal"
                 }`}
               >
                 <h1
-                  className="text-4xl md:text-5xl lg:text-[72px] font-bold text-white font-sans leading-[1.1] tracking-[-2px]"
-                  style={{
-                    transform: `translateX(-${textTranslateX}vw)`,
-                    transition: "transform 0.4s ease",
-                  }}
+                  ref={titleLeftRef}
+                  className="text-4xl md:text-5xl lg:text-[72px] font-bold text-white font-sans leading-[1.1] tracking-[-2px] will-change-transform"
                 >
                   {firstWord}
                 </h1>
                 <h1
-                  className="text-4xl md:text-5xl lg:text-[72px] font-bold text-center text-white font-sans leading-[1.1] tracking-[-2px]"
-                  style={{
-                    transform: `translateX(${textTranslateX}vw)`,
-                    transition: "transform 0.4s ease",
-                  }}
+                  ref={titleRightRef}
+                  className="text-4xl md:text-5xl lg:text-[72px] font-bold text-center text-white font-sans leading-[1.1] tracking-[-2px] will-change-transform"
                 >
                   {restOfTitle}
                 </h1>
