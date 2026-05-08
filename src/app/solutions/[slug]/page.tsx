@@ -9,6 +9,7 @@ import {
   TrustedByStrip,
   WhySubtechSection,
 } from "@/components/solutions/SolutionsCommon";
+import SectorIcon from "@/components/solutions/SectorIcon";
 import { SECTORS, getSector } from "@/lib/solutions";
 
 export function generateStaticParams() {
@@ -55,8 +56,10 @@ export default async function SectorPage({
 
         {/* Sector hero */}
         <header className="max-w-3xl mb-12">
-          <div className="flex items-center gap-3 mb-4">
-            <span className="text-[36px]">{sector.icon}</span>
+          <div className="flex items-center gap-3 mb-5">
+            <span className="w-12 h-12 rounded-xl bg-[#FAFAFA] border border-[#E8E8E8] grid place-items-center text-[#0D0D0D]">
+              <SectorIcon slug={sector.slug} className="w-6 h-6" />
+            </span>
             <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-red-500">
               Industry Solution · {sector.solutionCount} solutions
             </p>

@@ -12,6 +12,7 @@ import {
   WHY_SUBTECH,
   type Sector,
 } from "@/lib/solutions";
+import SectorIcon from "./SectorIcon";
 
 export function SectorGrid({ exclude }: { exclude?: string }) {
   const sectors = exclude
@@ -26,13 +27,12 @@ export function SectorGrid({ exclude }: { exclude?: string }) {
           href={`/solutions/${s.slug}`}
           className="group bg-white border border-[#E8E8E8] rounded-2xl p-6 hover:border-red-500 hover:shadow-[0_16px_40px_rgba(204,0,0,0.08)] hover:-translate-y-1 transition-all flex flex-col"
         >
-          <div className="text-[28px] mb-3">{s.icon}</div>
-          <h3 className="text-[18px] font-bold text-[#0D0D0D] leading-snug mb-1">
+          <div className="w-11 h-11 rounded-xl bg-[#FAFAFA] border border-[#EFEFEF] grid place-items-center text-[#0D0D0D] group-hover:text-red-500 group-hover:border-red-500/30 group-hover:bg-red-500/5 transition-colors mb-4">
+            <SectorIcon slug={s.slug} className="w-5 h-5" />
+          </div>
+          <h3 className="text-[17px] font-bold text-[#0D0D0D] leading-snug mb-3 flex-1 group-hover:text-red-500 transition-colors">
             {s.name}
           </h3>
-          <p className="text-[13px] text-[#767676] leading-[1.55] mb-4 flex-1">
-            {s.tagline}
-          </p>
           <div className="flex items-center justify-between text-[12.5px]">
             <span className="text-red-500 font-semibold">
               {s.solutionCount} Solutions

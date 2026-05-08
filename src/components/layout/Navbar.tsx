@@ -5,27 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { SECTORS } from "@/lib/solutions";
-
-/**
- * Subtech Navbar — ported from PHP `config/header.php`.
- *
- * - Sticky top, white background (matches subtech.in)
- * - Brand: logo + "Since 1998" caption
- * - Center: Home / Products (mega menu) / Solutions / About / Company (dropdown) /
- *   Contact / Smart-Panel
- * - Right: Customer Care pill button (with icon)
- * - Mobile: dark right-side off-canvas with collapsible sections
- */
+import SectorIcon from "@/components/solutions/SectorIcon";
 
 const RED = "#E40006";
 const RED_HOVER = "#C00005";
 
-/* ───────── DATA ─────────
- * Mirrors the live PHP site at subtech.in:
- *   /products/{category}/{subcategory}/{type}
- * Sub-categories are the "Sub-category" column; their .items are the Type
- * column in the four-column mega menu.
- */
 type ProductLink = { name: string; href: string };
 type ProductGroup = {
   name: string;
@@ -134,13 +118,8 @@ const COMPANY_LINKS = [
   },
 ];
 
-const NAV_LINKS = [
-  { name: "Home", href: "/" },
-  { name: "About Us", href: "/about" },
-  { name: "Solutions", href: "/solutions" },
-  { name: "Contact Us", href: "/contact" },
-  { name: "Smart-Panel", href: "/smart-motor-control-panel" },
-];
+/* Sector line-art icons live in the shared SectorIcon component so the
+ * navbar dropdown and the /solutions cards stay visually identical. */
 
 /* ───────── ICONS ───────── */
 const ChevronDown = ({ className = "" }: { className?: string }) => (
@@ -184,14 +163,9 @@ function ProductsMegaMenu({ open, onClose }: { open: boolean; onClose: () => voi
                 {PRODUCT_DATA.map((p, i) => (
                   <li
                     key={p.slug}
-                    onMouseEnter={() => {
-                      setActiveCat(i);
-                      setActiveSub(0);
-                    }}
+                    onMouseEnter={() => { setActiveCat(i); setActiveSub(0); }}
                     className={`px-3 py-2 rounded-md text-[14px] cursor-pointer transition-all ${
-                      i === activeCat
-                        ? "bg-[#f8d7da] font-semibold"
-                        : "text-[#495057] hover:bg-[#e9ecef] hover:text-[#212529]"
+                      i === activeCat ? "bg-[#f8d7da] font-semibold" : "text-[#495057] hover:bg-[#e9ecef] hover:text-[#212529]"
                     }`}
                     style={i === activeCat ? { color: RED } : undefined}
                   >
@@ -212,9 +186,7 @@ function ProductsMegaMenu({ open, onClose }: { open: boolean; onClose: () => voi
                     key={s.name}
                     onMouseEnter={() => setActiveSub(i)}
                     className={`px-3 py-2 rounded-md text-[14px] cursor-pointer transition-all ${
-                      i === activeSub
-                        ? "bg-[#f8d7da] font-semibold"
-                        : "text-[#495057] hover:bg-[#e9ecef] hover:text-[#212529]"
+                      i === activeSub ? "bg-[#f8d7da] font-semibold" : "text-[#495057] hover:bg-[#e9ecef] hover:text-[#212529]"
                     }`}
                     style={i === activeSub ? { color: RED } : undefined}
                   >
@@ -270,17 +242,8 @@ function ProductsMegaMenu({ open, onClose }: { open: boolean; onClose: () => voi
   );
 }
 
-/* ───────── DESKTOP: SOLUTIONS DROPDOWN ─────────
- * One-click access to all 13 sector pages, mirroring the Company dropdown
- * style. Includes a "View all solutions" footer link to the hub page.
- */
-function SolutionsDropdown({
-  open,
-  onClose,
-}: {
-  open: boolean;
-  onClose: () => void;
-}) {
+/* ───────── DESKTOP: SOLUTIONS DROPDOWN ───────── */
+function SolutionsDropdown({ open, onClose }: { open: boolean; onClose: () => void }) {
   return (
     <AnimatePresence>
       {open && (
@@ -289,14 +252,14 @@ function SolutionsDropdown({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -6 }}
           transition={{ duration: 0.18, ease: "easeOut" }}
-          className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[680px] max-w-[calc(100vw-2rem)] bg-white rounded-xl border border-black/[0.07] p-3 shadow-[0_8px_32px_rgba(0,0,0,0.12),0_2px_8px_rgba(0,0,0,0.06)]"
+          className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[600px] max-w-[calc(100vw-2rem)] bg-white rounded-xl border border-black/[0.07] p-3 shadow-[0_8px_32px_rgba(0,0,0,0.12),0_2px_8px_rgba(0,0,0,0.06)]"
           onMouseLeave={onClose}
         >
           <span
             aria-hidden
             className="absolute -top-[5px] left-1/2 -translate-x-1/2 w-[10px] h-[10px] bg-white rotate-45 border-t border-l border-black/[0.07] rounded-tl-[2px]"
           />
-          <ul className="grid grid-cols-2 gap-1">
+          <ul className="grid grid-cols-2 gap-0.5">
             {SECTORS.map((s) => (
               <li key={s.slug}>
                 <Link
@@ -304,15 +267,10 @@ function SolutionsDropdown({
                   onClick={onClose}
                   className="group flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13.5px] font-medium text-[#1a1a2e] hover:bg-[#f5f5f8] hover:text-[#d0021b] transition"
                 >
-                  <span className="w-[30px] h-[30px] rounded-[7px] bg-[#f0f0f4] grid place-items-center text-[16px] shrink-0 group-hover:bg-[#d0021b]/10 transition">
-                    {s.icon}
+                  <span className="w-[28px] h-[28px] rounded-[6px] bg-[#f0f0f4] grid place-items-center text-[#555] shrink-0 group-hover:bg-[#d0021b]/10 group-hover:text-[#d0021b] transition">
+                    <SectorIcon slug={s.slug} className="w-4 h-4" />
                   </span>
-                  <span className="flex-1 leading-tight">
-                    <span className="block">{s.name}</span>
-                    <span className="block text-[11px] text-[#888] font-normal mt-0.5 truncate">
-                      {s.tagline}
-                    </span>
-                  </span>
+                  <span>{s.name}</span>
                 </Link>
               </li>
             ))}
@@ -388,9 +346,7 @@ function MobileOffcanvas({
   useEffect(() => {
     if (open) document.body.style.overflow = "hidden";
     else document.body.style.overflow = "";
-    return () => {
-      document.body.style.overflow = "";
-    };
+    return () => { document.body.style.overflow = ""; };
   }, [open]);
 
   return (
@@ -437,26 +393,18 @@ function MobileOffcanvas({
               <ul className="py-2">
                 <MobileLink href="/" label="Home" onClose={onClose} active={pathname === "/"} />
 
-                {/* Products with collapse */}
+                {/* Products collapse */}
                 <li>
                   <button
                     onClick={() => setProductsOpen((v) => !v)}
                     className={`w-full flex justify-between items-center text-[14px] py-3.5 px-5 border-b border-white/[0.05] text-left transition ${
-                      productsOpen
-                        ? "bg-[rgba(228,0,6,0.08)] text-white"
-                        : "text-[#C8CDD8] hover:bg-white/[0.04] hover:text-white"
+                      productsOpen ? "bg-[rgba(228,0,6,0.08)] text-white" : "text-[#C8CDD8] hover:bg-white/[0.04] hover:text-white"
                     }`}
-                    style={
-                      productsOpen
-                        ? { boxShadow: `inset 3px 0 0 ${RED}` }
-                        : undefined
-                    }
+                    style={productsOpen ? { boxShadow: `inset 3px 0 0 ${RED}` } : undefined}
                   >
                     Products
                     <span
-                      className={`text-[12px] transition-transform duration-300 ${
-                        productsOpen ? "rotate-90" : ""
-                      }`}
+                      className={`text-[12px] transition-transform duration-300 ${productsOpen ? "rotate-90" : ""}`}
                       style={{ color: productsOpen ? RED : "#6B7280" }}
                     >
                       ▶
@@ -477,9 +425,7 @@ function MobileOffcanvas({
                             return (
                               <li key={p.slug}>
                                 <button
-                                  onClick={() =>
-                                    setOpenProductIdx(isOpen ? null : idx)
-                                  }
+                                  onClick={() => setOpenProductIdx(isOpen ? null : idx)}
                                   className="w-full flex justify-between items-center px-5 py-2.5 text-[13px] font-semibold text-[#C8CDD8] hover:bg-white/[0.04] hover:text-white transition"
                                 >
                                   {p.name}
@@ -524,21 +470,13 @@ function MobileOffcanvas({
                   <button
                     onClick={() => setSolutionsOpen((v) => !v)}
                     className={`w-full flex justify-between items-center text-[14px] py-3.5 px-5 border-b border-white/[0.05] text-left transition ${
-                      solutionsOpen
-                        ? "bg-[rgba(228,0,6,0.08)] text-white"
-                        : "text-[#C8CDD8] hover:bg-white/[0.04] hover:text-white"
+                      solutionsOpen ? "bg-[rgba(228,0,6,0.08)] text-white" : "text-[#C8CDD8] hover:bg-white/[0.04] hover:text-white"
                     }`}
-                    style={
-                      solutionsOpen
-                        ? { boxShadow: `inset 3px 0 0 ${RED}` }
-                        : undefined
-                    }
+                    style={solutionsOpen ? { boxShadow: `inset 3px 0 0 ${RED}` } : undefined}
                   >
                     Solutions
                     <span
-                      className={`text-[12px] transition-transform duration-300 ${
-                        solutionsOpen ? "rotate-90" : ""
-                      }`}
+                      className={`text-[12px] transition-transform duration-300 ${solutionsOpen ? "rotate-90" : ""}`}
                       style={{ color: solutionsOpen ? RED : "#6B7280" }}
                     >
                       ▶
@@ -567,9 +505,11 @@ function MobileOffcanvas({
                             <Link
                               href={`/solutions/${s.slug}`}
                               onClick={onClose}
-                              className="flex items-center gap-2 py-2 pl-9 pr-5 text-[13px] text-[#9CA3AF] hover:text-white hover:bg-white/[0.03] transition"
+                              className="flex items-center gap-2.5 py-2 pl-9 pr-5 text-[13px] text-[#9CA3AF] hover:text-white hover:bg-white/[0.03] transition"
                             >
-                              <span className="text-[14px]">{s.icon}</span>
+                              <span className="text-[#9CA3AF]">
+                                <SectorIcon slug={s.slug} className="w-4 h-4" />
+                              </span>
                               <span className="leading-tight">{s.name}</span>
                             </Link>
                           </li>
@@ -586,21 +526,13 @@ function MobileOffcanvas({
                   <button
                     onClick={() => setCompanyOpen((v) => !v)}
                     className={`w-full flex justify-between items-center text-[14px] py-3.5 px-5 border-b border-white/[0.05] text-left transition ${
-                      companyOpen
-                        ? "bg-[rgba(228,0,6,0.08)] text-white"
-                        : "text-[#C8CDD8] hover:bg-white/[0.04] hover:text-white"
+                      companyOpen ? "bg-[rgba(228,0,6,0.08)] text-white" : "text-[#C8CDD8] hover:bg-white/[0.04] hover:text-white"
                     }`}
-                    style={
-                      companyOpen
-                        ? { boxShadow: `inset 3px 0 0 ${RED}` }
-                        : undefined
-                    }
+                    style={companyOpen ? { boxShadow: `inset 3px 0 0 ${RED}` } : undefined}
                   >
                     Company
                     <span
-                      className={`text-[12px] transition-transform duration-300 ${
-                        companyOpen ? "rotate-90" : ""
-                      }`}
+                      className={`text-[12px] transition-transform duration-300 ${companyOpen ? "rotate-90" : ""}`}
                       style={{ color: companyOpen ? RED : "#6B7280" }}
                     >
                       ▶
@@ -651,16 +583,7 @@ function MobileOffcanvas({
                     color: RED,
                   }}
                 >
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                   </svg>
                   Customer Care
@@ -691,9 +614,7 @@ function MobileLink({
         href={href}
         onClick={onClose}
         className={`block text-[14px] py-3.5 px-5 border-b border-white/[0.05] transition relative ${
-          active
-            ? "text-white bg-[rgba(228,0,6,0.08)]"
-            : "text-[#C8CDD8] hover:bg-white/[0.04] hover:text-white"
+          active ? "text-white bg-[rgba(228,0,6,0.08)]" : "text-[#C8CDD8] hover:bg-white/[0.04] hover:text-white"
         }`}
         style={active ? { boxShadow: `inset 3px 0 0 ${RED}` } : undefined}
       >
@@ -722,7 +643,6 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close dropdowns on route change
   useEffect(() => {
     setMobileOpen(false);
     setProductsOpen(false);
@@ -733,7 +653,6 @@ export default function Navbar() {
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
-  // Hover with small delay so the menu doesn't snap shut accidentally
   const hover = (
     setter: (b: boolean) => void,
     ref: React.MutableRefObject<ReturnType<typeof setTimeout> | null>,
@@ -769,10 +688,9 @@ export default function Navbar() {
 
           {/* Desktop nav */}
           <nav className="hidden lg:flex items-center gap-1 mx-auto relative">
-            {/* Home */}
             <DesktopLink href="/" label="Home" active={isActive("/") && pathname === "/"} />
 
-            {/* Products with mega menu */}
+            {/* Products mega menu */}
             <div
               className="relative"
               onMouseEnter={() => hover(setProductsOpen, productsTimeout, true)}
@@ -781,16 +699,12 @@ export default function Navbar() {
               <button
                 aria-expanded={productsOpen}
                 className={`flex items-center gap-1.5 px-3 py-2 text-[14px] font-medium transition ${
-                  productsOpen || isActive("/products")
-                    ? "text-black"
-                    : "text-[#212529] hover:text-[#000]"
+                  productsOpen || isActive("/products") ? "text-black" : "text-[#212529] hover:text-[#000]"
                 }`}
               >
                 Products
                 <ChevronDown
-                  className={`opacity-80 transition-transform duration-300 ${
-                    productsOpen ? "rotate-180" : ""
-                  }`}
+                  className={`opacity-80 transition-transform duration-300 ${productsOpen ? "rotate-180" : ""}`}
                 />
               </button>
             </div>
@@ -805,22 +719,15 @@ export default function Navbar() {
                 href="/solutions"
                 aria-expanded={solutionsOpen}
                 className={`flex items-center gap-1.5 px-3 py-2 text-[14px] font-medium transition ${
-                  solutionsOpen || isActive("/solutions")
-                    ? "text-black"
-                    : "text-[#212529] hover:text-black"
+                  solutionsOpen || isActive("/solutions") ? "text-black" : "text-[#212529] hover:text-black"
                 }`}
               >
                 Solutions
                 <ChevronDown
-                  className={`opacity-80 transition-transform duration-300 ${
-                    solutionsOpen ? "rotate-180" : ""
-                  }`}
+                  className={`opacity-80 transition-transform duration-300 ${solutionsOpen ? "rotate-180" : ""}`}
                 />
               </Link>
-              <SolutionsDropdown
-                open={solutionsOpen}
-                onClose={() => setSolutionsOpen(false)}
-              />
+              <SolutionsDropdown open={solutionsOpen} onClose={() => setSolutionsOpen(false)} />
             </div>
 
             <DesktopLink href="/about" label="About Us" active={isActive("/about")} />
@@ -837,15 +744,10 @@ export default function Navbar() {
               >
                 Company
                 <ChevronDown
-                  className={`opacity-80 transition-transform duration-300 ${
-                    companyOpen ? "rotate-180" : ""
-                  }`}
+                  className={`opacity-80 transition-transform duration-300 ${companyOpen ? "rotate-180" : ""}`}
                 />
               </button>
-              <CompanyDropdown
-                open={companyOpen}
-                onClose={() => setCompanyOpen(false)}
-              />
+              <CompanyDropdown open={companyOpen} onClose={() => setCompanyOpen(false)} />
             </div>
 
             <DesktopLink href="/contact" label="Contact Us" active={isActive("/contact")} />
@@ -865,16 +767,7 @@ export default function Navbar() {
               onMouseEnter={(e) => (e.currentTarget.style.background = RED_HOVER)}
               onMouseLeave={(e) => (e.currentTarget.style.background = RED)}
             >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
               </svg>
               Customer Care
@@ -900,10 +793,7 @@ export default function Navbar() {
           onMouseEnter={() => hover(setProductsOpen, productsTimeout, true)}
           onMouseLeave={() => hover(setProductsOpen, productsTimeout, false)}
         >
-          <ProductsMegaMenu
-            open={productsOpen}
-            onClose={() => setProductsOpen(false)}
-          />
+          <ProductsMegaMenu open={productsOpen} onClose={() => setProductsOpen(false)} />
         </div>
       </header>
 
