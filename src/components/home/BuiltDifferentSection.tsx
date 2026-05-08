@@ -633,7 +633,7 @@ export default function BuiltDifferentSection() {
         }
         .comp-label {
           font-family: var(--mono);
-          font-size: 10px;
+          font-size: 18px;
           letter-spacing: 4px;
           color: var(--white);
           text-transform: uppercase;
@@ -763,15 +763,16 @@ export default function BuiltDifferentSection() {
         }
         .tech-fullname {
           font-size: 13px;
-          color: var(--muted);
+          color: white;
           letter-spacing: 1px;
           margin-bottom: 32px;
           font-family: var(--mono);
         }
         .tech-lead {
-          font-size: 15px;
+          font-size: 16px;
           line-height: 1.75;
-          color: var(--text);
+          color: #ffffff;
+          font-weight: 500;
           margin-bottom: 40px;
           border-left: 2px solid var(--red);
           padding-left: 20px;
