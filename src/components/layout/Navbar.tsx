@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
+import { SECTORS } from "@/lib/solutions";
 
 /**
  * Subtech Navbar — ported from PHP `config/header.php`.
@@ -269,6 +270,66 @@ function ProductsMegaMenu({ open, onClose }: { open: boolean; onClose: () => voi
   );
 }
 
+/* ───────── DESKTOP: SOLUTIONS DROPDOWN ─────────
+ * One-click access to all 13 sector pages, mirroring the Company dropdown
+ * style. Includes a "View all solutions" footer link to the hub page.
+ */
+function SolutionsDropdown({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) {
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          initial={{ opacity: 0, y: -6 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -6 }}
+          transition={{ duration: 0.18, ease: "easeOut" }}
+          className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[680px] max-w-[calc(100vw-2rem)] bg-white rounded-xl border border-black/[0.07] p-3 shadow-[0_8px_32px_rgba(0,0,0,0.12),0_2px_8px_rgba(0,0,0,0.06)]"
+          onMouseLeave={onClose}
+        >
+          <span
+            aria-hidden
+            className="absolute -top-[5px] left-1/2 -translate-x-1/2 w-[10px] h-[10px] bg-white rotate-45 border-t border-l border-black/[0.07] rounded-tl-[2px]"
+          />
+          <ul className="grid grid-cols-2 gap-1">
+            {SECTORS.map((s) => (
+              <li key={s.slug}>
+                <Link
+                  href={`/solutions/${s.slug}`}
+                  onClick={onClose}
+                  className="group flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13.5px] font-medium text-[#1a1a2e] hover:bg-[#f5f5f8] hover:text-[#d0021b] transition"
+                >
+                  <span className="w-[30px] h-[30px] rounded-[7px] bg-[#f0f0f4] grid place-items-center text-[16px] shrink-0 group-hover:bg-[#d0021b]/10 transition">
+                    {s.icon}
+                  </span>
+                  <span className="flex-1 leading-tight">
+                    <span className="block">{s.name}</span>
+                    <span className="block text-[11px] text-[#888] font-normal mt-0.5 truncate">
+                      {s.tagline}
+                    </span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <Link
+            href="/solutions"
+            onClick={onClose}
+            className="mt-2 block text-center px-3 py-2.5 rounded-lg text-[13px] font-semibold border-t border-[#f0f0f4] pt-3 text-[#d0021b] hover:bg-[#fff5f5] transition"
+          >
+            View all 13 industry solutions →
+          </Link>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
 /* ───────── DESKTOP: COMPANY DROPDOWN ───────── */
 function CompanyDropdown({ open, onClose }: { open: boolean; onClose: () => void }) {
   return (
@@ -320,6 +381,7 @@ function MobileOffcanvas({
   pathname: string;
 }) {
   const [productsOpen, setProductsOpen] = useState(false);
+  const [solutionsOpen, setSolutionsOpen] = useState(false);
   const [companyOpen, setCompanyOpen] = useState(false);
   const [openProductIdx, setOpenProductIdx] = useState<number | null>(null);
 
@@ -457,7 +519,66 @@ function MobileOffcanvas({
                   </AnimatePresence>
                 </li>
 
-                <MobileLink href="/solutions" label="Solutions" onClose={onClose} active={pathname.startsWith("/solutions")} />
+                {/* Solutions collapse */}
+                <li>
+                  <button
+                    onClick={() => setSolutionsOpen((v) => !v)}
+                    className={`w-full flex justify-between items-center text-[14px] py-3.5 px-5 border-b border-white/[0.05] text-left transition ${
+                      solutionsOpen
+                        ? "bg-[rgba(228,0,6,0.08)] text-white"
+                        : "text-[#C8CDD8] hover:bg-white/[0.04] hover:text-white"
+                    }`}
+                    style={
+                      solutionsOpen
+                        ? { boxShadow: `inset 3px 0 0 ${RED}` }
+                        : undefined
+                    }
+                  >
+                    Solutions
+                    <span
+                      className={`text-[12px] transition-transform duration-300 ${
+                        solutionsOpen ? "rotate-90" : ""
+                      }`}
+                      style={{ color: solutionsOpen ? RED : "#6B7280" }}
+                    >
+                      ▶
+                    </span>
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {solutionsOpen && (
+                      <motion.ul
+                        initial={{ height: 0 }}
+                        animate={{ height: "auto" }}
+                        exit={{ height: 0 }}
+                        transition={{ duration: 0.25 }}
+                        className="overflow-hidden bg-[#0D0F14] border-b border-white/[0.05]"
+                      >
+                        <li>
+                          <Link
+                            href="/solutions"
+                            onClick={onClose}
+                            className="block py-2.5 pl-9 pr-5 text-[12.5px] font-semibold text-white/85 hover:bg-white/[0.04] transition"
+                          >
+                            All 13 Industry Solutions →
+                          </Link>
+                        </li>
+                        {SECTORS.map((s) => (
+                          <li key={s.slug}>
+                            <Link
+                              href={`/solutions/${s.slug}`}
+                              onClick={onClose}
+                              className="flex items-center gap-2 py-2 pl-9 pr-5 text-[13px] text-[#9CA3AF] hover:text-white hover:bg-white/[0.03] transition"
+                            >
+                              <span className="text-[14px]">{s.icon}</span>
+                              <span className="leading-tight">{s.name}</span>
+                            </Link>
+                          </li>
+                        ))}
+                      </motion.ul>
+                    )}
+                  </AnimatePresence>
+                </li>
+
                 <MobileLink href="/about" label="About Us" onClose={onClose} active={pathname.startsWith("/about")} />
 
                 {/* Company collapse */}
@@ -588,8 +709,10 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
+  const [solutionsOpen, setSolutionsOpen] = useState(false);
   const [companyOpen, setCompanyOpen] = useState(false);
   const productsTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const solutionsTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const companyTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -603,6 +726,7 @@ export default function Navbar() {
   useEffect(() => {
     setMobileOpen(false);
     setProductsOpen(false);
+    setSolutionsOpen(false);
     setCompanyOpen(false);
   }, [pathname]);
 
@@ -671,7 +795,34 @@ export default function Navbar() {
               </button>
             </div>
 
-            <DesktopLink href="/solutions" label="Solutions" active={isActive("/solutions")} />
+            {/* Solutions dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={() => hover(setSolutionsOpen, solutionsTimeout, true)}
+              onMouseLeave={() => hover(setSolutionsOpen, solutionsTimeout, false)}
+            >
+              <Link
+                href="/solutions"
+                aria-expanded={solutionsOpen}
+                className={`flex items-center gap-1.5 px-3 py-2 text-[14px] font-medium transition ${
+                  solutionsOpen || isActive("/solutions")
+                    ? "text-black"
+                    : "text-[#212529] hover:text-black"
+                }`}
+              >
+                Solutions
+                <ChevronDown
+                  className={`opacity-80 transition-transform duration-300 ${
+                    solutionsOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </Link>
+              <SolutionsDropdown
+                open={solutionsOpen}
+                onClose={() => setSolutionsOpen(false)}
+              />
+            </div>
+
             <DesktopLink href="/about" label="About Us" active={isActive("/about")} />
 
             {/* Company dropdown */}
