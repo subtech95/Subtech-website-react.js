@@ -67,12 +67,13 @@ function AboutHero() {
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/images/subtech-factory.webp"
-                alt="Subtech Innovation Hub"
+                src="/images/about/factory.webp"
+                alt="Subtech manufacturing facility, Greater Noida"
                 className="w-full h-auto max-h-[420px] object-cover block"
                 onError={(e) => {
+                  // Fallback to existing on-disk image until factory.jpg is uploaded
                   (e.currentTarget as HTMLImageElement).src =
-                    "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1200&q=80";
+                    "/images/subtech.webp";
                 }}
               />
             </motion.div>
@@ -176,12 +177,13 @@ function VisionCard() {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/images/sectors/infrastructure.webp"
-            alt="Vision"
+            src="/images/about/skyline.png"
+            alt="Subtech vision — powering urban infrastructure"
             className="w-full h-full object-cover absolute inset-0"
             onError={(e) => {
+              // Fallback to existing on-disk image until skyline.jpg is uploaded
               (e.currentTarget as HTMLImageElement).src =
-                "https://images.unsplash.com/photo-1518349619113-03114f06ac3a?auto=format&fit=crop&w=1600&q=80";
+                "/images/sectors/sector1.webp";
             }}
           />
           <div className="absolute inset-x-0 bottom-0 px-6 sm:px-10 py-6 sm:py-8 flex flex-col items-center text-center bg-gradient-to-t from-black/70 to-black/30">
@@ -417,8 +419,9 @@ const journey2015: TimelineEntry[] = [
 function TimelineList({ items }: { items: TimelineEntry[] }) {
   return (
     <div className="relative">
-      {/* center line */}
-      <div className="absolute top-0 bottom-0 left-[30px] md:left-1/2 w-[2px] bg-[#e9ecef] -translate-x-1/2" />
+      {/* Rail — left-edge on mobile (24px), centered on desktop */}
+      <div className="absolute top-0 bottom-0 left-[24px] md:left-1/2 w-[2px] bg-[#e9ecef] -translate-x-1/2" />
+
       {items.map((item, i) => (
         <motion.div
           key={`${item.year}-${i}`}
@@ -426,34 +429,44 @@ function TimelineList({ items }: { items: TimelineEntry[] }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.5 }}
-          className="relative pt-5 pb-12 md:pb-16"
+          className="relative pt-4 pb-10 md:pb-16"
         >
-          <div className="grid md:grid-cols-2 items-center">
-            {/* Dot */}
-            <div
-              className="absolute top-10 z-10 w-[60px] h-[60px] rounded-full text-white font-semibold text-[1rem] flex items-center justify-center left-[30px] md:left-1/2 -translate-x-1/2"
-              style={{
-                background: RED,
-                boxShadow: "0 0 0 4px rgba(175,9,9,0.95), 0 0 22px 10px rgba(228,0,6,0.35)",
-              }}
-            >
-              {item.year}
-            </div>
+          {/* Year dot — smaller on mobile, on the left rail */}
+          <div
+            className="absolute top-3 md:top-10 z-10 w-12 h-12 md:w-[60px] md:h-[60px] rounded-full text-white font-semibold text-[12px] md:text-[16px] flex items-center justify-center left-[24px] md:left-1/2 -translate-x-1/2"
+            style={{
+              background: RED,
+              boxShadow:
+                "0 0 0 3px rgba(175,9,9,0.9), 0 0 18px 6px rgba(228,0,6,0.3)",
+            }}
+          >
+            {item.year}
+          </div>
 
+          {/* Content — single full-width column on mobile, alternating on desktop */}
+          <div className="md:grid md:grid-cols-2 md:items-center">
             {item.side === "left" ? (
               <>
-                <div className="md:text-right md:pr-[80px] pl-[80px] md:pl-0 order-2 md:order-1">
-                  <h4 className="font-bold text-[15px] text-[#0D0D0D] mt-0 mb-2">{item.title}</h4>
-                  <p className="text-[#0D0D0D] text-[14px] leading-[1.7] m-0">{item.body}</p>
+                <div className="md:text-right md:pr-[80px] pl-[68px] md:pl-0 pr-1 order-2 md:order-1">
+                  <h4 className="font-bold text-[15px] md:text-[16px] text-[#0D0D0D] mt-0 mb-2 leading-[1.35]">
+                    {item.title}
+                  </h4>
+                  <p className="text-[#3a3a3a] text-[13.5px] md:text-[14px] leading-[1.7] m-0">
+                    {item.body}
+                  </p>
                 </div>
-                <div className="order-1 md:order-2" />
+                <div className="hidden md:block order-1 md:order-2" />
               </>
             ) : (
               <>
                 <div className="hidden md:block" />
-                <div className="md:pl-[80px] pl-[80px] order-2">
-                  <h4 className="font-bold text-[15px] text-[#0D0D0D] mt-0 mb-2">{item.title}</h4>
-                  <p className="text-[#0D0D0D] text-[14px] leading-[1.7] m-0">{item.body}</p>
+                <div className="md:pl-[80px] pl-[68px] pr-1 order-2">
+                  <h4 className="font-bold text-[15px] md:text-[16px] text-[#0D0D0D] mt-0 mb-2 leading-[1.35]">
+                    {item.title}
+                  </h4>
+                  <p className="text-[#3a3a3a] text-[13.5px] md:text-[14px] leading-[1.7] m-0">
+                    {item.body}
+                  </p>
                 </div>
               </>
             )}
