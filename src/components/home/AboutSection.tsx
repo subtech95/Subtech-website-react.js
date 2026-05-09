@@ -40,7 +40,7 @@ export default function AboutSection() {
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/images/subtech.webp"
+              src="/images/about/factory.webp"
               alt="Subtech Manufacturing Facility, Greater Noida"
               className="w-full rounded-xl block object-cover aspect-[4/3]"
               loading="lazy"
