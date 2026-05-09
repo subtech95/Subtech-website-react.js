@@ -97,16 +97,35 @@ async function forwardJson(url: string, payload: Payload): Promise<{
   }
 }
 
+/**
+ * Differentiate a real HTML <form action="/api/enquiry"> submit (which
+ * expects a 303 redirect → /thank-you) from a JS fetch() submit (which
+ * expects a JSON response). Using Sec-Fetch-Dest as the primary signal:
+ *
+ *   - Native form submit → Sec-Fetch-Dest: document
+ *   - fetch() / XHR     → Sec-Fetch-Dest: empty
+ *
+ * Fall back to the Accept header for older browsers — native submits
+ * include text/html, fetch defaults to any media type.
+ */
 function isHtmlFormSubmit(req: Request): boolean {
-  const ctype = req.headers.get("content-type") ?? "";
-  const xhr = req.headers.get("x-requested-with");
-  // fetch-based callers usually set 'x-requested-with' or use JSON body —
-  // anything else with form-data content type is treated as a plain HTML form.
-  return (
-    !xhr &&
-    (ctype.includes("application/x-www-form-urlencoded") ||
-      ctype.includes("multipart/form-data"))
-  );
+  if (req.headers.get("sec-fetch-dest") === "document") return true;
+  const accept = req.headers.get("accept") ?? "";
+  return accept.includes("text/html");
+}
+
+/**
+ * Build an absolute redirect URL that respects the Nginx proxy's host —
+ * `req.url` would otherwise be `http://0.0.0.0:3002/...` because that's
+ * what Next.js sees when listening behind a reverse proxy.
+ */
+function publicUrl(req: Request, path: string): URL {
+  const proto = req.headers.get("x-forwarded-proto") || "https";
+  const host =
+    req.headers.get("x-forwarded-host") ||
+    req.headers.get("host") ||
+    "earth.subtech.in";
+  return new URL(path, `${proto}://${host}`);
 }
 
 export async function POST(req: Request) {
@@ -157,14 +176,12 @@ export async function POST(req: Request) {
 
   // ── 4. HTML form submits → redirect to thank-you ───────────────────────
   if (isHtmlFormSubmit(req)) {
-    if (!fwd.ok) {
-      // Even on upstream failure, send the user to thank-you so the lead
-      // isn't lost from the user's perspective. The console.warn above
-      // ensures we have a recoverable trail.
-    }
     const product = (payload.product || "your enquiry").slice(0, 120);
-    const thankUrl = new URL("/thank-you", req.url);
+    const thankUrl = publicUrl(req, "/thank-you");
     thankUrl.searchParams.set("p", product);
+    // Even on upstream failure, send the user to thank-you so the lead
+    // isn't lost from the visitor's perspective. The console.warn above
+    // ensures the lead is recoverable from `pm2 logs`.
     return NextResponse.redirect(thankUrl, 303);
   }
 
