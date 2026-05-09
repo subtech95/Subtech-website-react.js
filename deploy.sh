@@ -20,7 +20,11 @@ echo "[3/5] Building production bundle..."
 NODE_ENV=production npm run build
 
 # Step 4: Copy static files into standalone output
+# IMPORTANT: remove any pre-existing dirs first. Plain `cp -r src dst` nests
+# `src/` *inside* `dst/` if `dst/` already exists, which makes /images/* 404
+# (the files end up at /public/images/* instead).
 echo "[4/5] Copying static assets to standalone..."
+rm -rf .next/standalone/.next/static .next/standalone/public
 cp -r .next/static .next/standalone/.next/static
 if [ -d "public" ]; then
   cp -r public .next/standalone/public
