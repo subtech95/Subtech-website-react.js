@@ -4,8 +4,9 @@ import Link from "next/link";
 import { useState } from "react";
 
 /* ============================================================
-   Customer Care — full client page
-   Ported from customer-care.php (uses /Controller/Master/ endpoint)
+   Customer Care — light theme client page
+   Logic untouched: same state, validation and fetch handlers.
+   Only markup/styles changed (cream/white look from design ref).
    ============================================================ */
 
 // Same-origin proxy — avoids CORS errors when posted from earth.subtech.in.
@@ -172,16 +173,11 @@ export default function CustomerCareClient() {
         </div>
       </div>
 
-      <div className="cc-bg-glow" />
-
       <div className="cc-wrap">
         {/* HEADER */}
         <div className="cc-header">
           <div className="cc-eyebrow">Support Centre</div>
-          <h1>
-            <em>
-            Customer Care</em>
-          </h1>
+          <h1>Customer Care</h1>
           <p>We&apos;re here to help with service, warranty and product support.</p>
         </div>
 
@@ -194,9 +190,10 @@ export default function CustomerCareClient() {
               onClick={() => setTab(t.id)}
               role="tab"
               aria-selected={tab === t.id}
+              type="button"
             >
               {t.icon}
-              {t.label}
+              <span>{t.label}</span>
             </button>
           ))}
         </div>
@@ -533,6 +530,11 @@ export default function CustomerCareClient() {
       </div>
 
       <style dangerouslySetInnerHTML={{ __html: `
+        /* ============================================================
+           Customer Care — light theme (cream / white / red accent)
+           Reset only the typography our parent layout sets so we can
+           drive sizes locally.
+           ============================================================ */
         #cc-section h1,
         #cc-section h2,
         #cc-section h3,
@@ -542,47 +544,40 @@ export default function CustomerCareClient() {
           font-weight: inherit;
           letter-spacing: inherit;
           line-height: inherit;
-          
+          margin: 0;
         }
         #cc-section {
-          --bg: #f8fafc;
-          --card: #0f0f0f;
-          --card2: #141414;
-          --border: rgba(255, 255, 255, 0.07);
-          --border2: rgba(255, 255, 255, 0.12);
-          --red: #c8102e;
-          --red-glow: rgba(200, 16, 46, 0.25);
-          --white: #f0f2f8;
-          --text: #9ca3af;
-          --muted: #4b5563;
-          --mono: "DM Mono", monospace;
-          --display: "Syne", sans-serif;
-          --body: "DM Sans", sans-serif;
+          --bg: #ffffff;
+          --surface: #ffffff;
+          --surface-soft: #faf8f6;
+          --border: #e8e4df;
+          --border-soft: #efece7;
+          --red: #C8102E;
+          --red-deep: #a30d24;
+          --red-tint: #fdebed;
+          --red-glow: rgba(200, 16, 46, 0.18);
+          --ink: #1a1a1a;
+          --text: #4b5563;
+          --muted: #888888;
+          --muted-soft: #999999;
+
+          --display: 'Playfair Display', 'DM Serif Display', Georgia, serif;
+          --body: 'DM Sans', system-ui, sans-serif;
+          --mono: 'DM Mono', ui-monospace, SFMono-Regular, monospace;
 
           background: var(--bg);
-          color: var(--white);
+          color: var(--ink);
           overflow-x: hidden;
           position: relative;
           font-family: var(--body);
           -webkit-font-smoothing: antialiased;
         }
-        #cc-section * {
-          box-sizing: border-box;
-        }
-        #cc-section::before {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-          pointer-events: none;
-          z-index: 0;
-          opacity: 0.35;
-        }
+        #cc-section * { box-sizing: border-box; }
 
         /* Breadcrumb */
         .cc-bc {
           background: #fff;
-          border-bottom: 1px solid #e5e7eb;
+          border-bottom: 1px solid var(--border);
           padding: 12px 0;
           position: relative;
           z-index: 2;
@@ -595,30 +590,16 @@ export default function CustomerCareClient() {
           gap: 8px;
           align-items: center;
           font-size: 12px;
-          color: #6b7280;
+          color: var(--muted);
         }
         .cc-bc-wrap a {
-          color: #6b7280;
+          color: var(--muted);
           text-decoration: none;
         }
-        .cc-bc-wrap a:hover {
-          color: var(--red);
-        }
+        .cc-bc-wrap a:hover { color: var(--red); }
         .cc-bc-wrap .cur {
-          color: #111;
+          color: var(--ink);
           font-weight: 500;
-        }
-
-        .cc-bg-glow {
-          position: absolute;
-          top: -200px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 800px;
-          height: 500px;
-          background: radial-gradient(ellipse, rgba(200, 16, 46, 0.08) 0%, transparent 70%);
-          pointer-events: none;
-          z-index: 0;
         }
 
         .cc-wrap {
@@ -626,25 +607,25 @@ export default function CustomerCareClient() {
           z-index: 1;
           max-width: 1100px;
           margin: 0 auto;
-          padding: 80px 40px 120px;
+          padding: 56px 40px 100px;
         }
 
         /* HEADER */
         .cc-header {
           text-align: center;
-          margin-bottom: 64px;
-          animation: ccFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+          margin-bottom: 36px;
+          animation: ccFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
         }
         .cc-eyebrow {
           display: inline-flex;
           align-items: center;
           gap: 10px;
-          font-family: var(--mono);
-          font-size: 10px;
-          letter-spacing: 4px;
+          font-size: 11px;
+          font-weight: 500;
+          letter-spacing: 0.18em;
           text-transform: uppercase;
           color: var(--red);
-          margin-bottom: 20px;
+          margin-bottom: 14px;
         }
         .cc-eyebrow::before,
         .cc-eyebrow::after {
@@ -654,126 +635,107 @@ export default function CustomerCareClient() {
           background: var(--red);
           opacity: 0.5;
         }
+          .cc-eyebrow p{
+          align-items: center;}
         .cc-header h1 {
           font-family: var(--display);
-          font-size: clamp(40px, 6vw, 72px);
-          font-weight: 800;
-          line-height: 1;
-          letter-spacing: -0.03em;
-          color: #111;
-          margin-bottom: 16px;
-        }
-        .cc-header h1 em {
-          font-style: normal;
+          font-size: clamp(48px, 7.5vw, 84px);
+          font-weight: 700;
+          line-height: 1.05;
+          letter-spacing: -0.02em;
           color: var(--red);
+          margin-bottom: 14px;
         }
-        .cc-header p {
+        #cc-section .cc-header p {
           font-size: 15px;
-          font-weight: 300;
-          color: #4b5563;
-          max-width: 400px;
-          margin: 0 auto;
-          line-height: 1.7;
+          color: #555;
+          max-width: 460px;
+          margin-left: auto;
+          margin-right: auto;
+          line-height: 1.6;
+          text-align: center !important;
         }
 
         /* TABS */
         .cc-tabs {
           display: flex;
           justify-content: center;
-          gap: 4px;
-          margin-bottom: 40px;
-          background: var(--card);
-          border: 1px solid var(--border);
-          border-radius: 14px;
-          padding: 6px;
+          gap: 0;
+          margin: 24px auto 0;
+          background: #fff;
+          border: 1px solid #e0dbd5;
+          border-radius: 10px;
           width: fit-content;
-          margin-left: auto;
-          margin-right: auto;
-          animation: ccFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+          overflow: hidden;
+          animation: ccFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both;
         }
         .cc-tab {
           display: flex;
           align-items: center;
           gap: 8px;
-          padding: 10px 24px;
-          border-radius: 10px;
-          font-family: var(--mono);
-          font-size: 11px;
+          padding: 11px 22px;
+          font-family: var(--body);
+          font-size: 13px;
           font-weight: 500;
-          letter-spacing: 2px;
-          text-transform: uppercase;
-          color: var(--muted);
+          color: #666;
           cursor: pointer;
           border: none;
+          border-right: 1px solid #e0dbd5;
           background: transparent;
-          transition: all 0.25s ease;
+          transition: background 0.18s, color 0.18s;
         }
+        .cc-tab:last-child { border-right: none; }
         .cc-tab svg {
-          width: 14px;
-          height: 14px;
+          width: 15px;
+          height: 15px;
           flex-shrink: 0;
           stroke: currentColor;
           fill: none;
-          stroke-width: 1.8;
+          stroke-width: 1.7;
           stroke-linecap: round;
           stroke-linejoin: round;
         }
         .cc-tab.active {
           background: var(--red);
           color: #fff;
-          box-shadow: 0 4px 20px var(--red-glow);
         }
         .cc-tab:not(.active):hover {
-          color: var(--white);
-          background: rgba(255, 255, 255, 0.05);
+          background: var(--surface-soft);
+          color: var(--ink);
         }
 
         /* PANELS */
         .cc-panels {
-          animation: ccFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+          animation: ccFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.16s both;
         }
         .cc-form-card {
-          background: var(--card);
+          background: #fff;
           border: 1px solid var(--border);
-          border-radius: 24px;
-          padding: 48px;
-          position: relative;
-          overflow: hidden;
-          box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
-        }
-        .cc-form-card::before {
-          content: "";
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          height: 1px;
-          background: linear-gradient(
-            90deg,
-            transparent,
-            rgba(200, 16, 46, 0.4),
-            transparent
-          );
+          border-radius: 16px;
+          padding: 32px 36px;
+          max-width: 640px;
+          margin: 32px auto 0;
+          box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
         }
         .cc-form-title {
           font-family: var(--display);
           font-size: 22px;
-          font-weight: 700;
-          color: var(--white);
+          font-weight: 600;
+          color: var(--ink);
           margin-bottom: 6px;
         }
         .cc-form-sub {
           font-size: 13px;
-          color: var(--text);
-          font-weight: 300;
-          margin-bottom: 36px;
+          color: var(--muted);
+          line-height: 1.5;
+          margin-bottom: 24px;
         }
 
         /* FORM */
         .cc-form {
           display: flex;
           flex-direction: column;
-          gap: 20px;
+          gap: 18px;
         }
         .cc-row {
           display: grid;
@@ -783,15 +745,15 @@ export default function CustomerCareClient() {
         .cc-field {
           display: flex;
           flex-direction: column;
-          gap: 8px;
+          gap: 6px;
         }
         .cc-field label {
-          font-family: var(--mono);
-          font-size: 10px;
-          font-weight: 500;
-          letter-spacing: 3px;
+          font-family: var(--body);
+          font-size: 10.5px;
+          font-weight: 600;
+          letter-spacing: 0.1em;
           text-transform: uppercase;
-          color: var(--text);
+          color: #999;
         }
         .cc-field label span {
           color: var(--red);
@@ -801,56 +763,56 @@ export default function CustomerCareClient() {
         .cc-field textarea,
         .cc-field select {
           font-family: var(--body);
-          font-size: 14px;
+          font-size: 13.5px;
           font-weight: 400;
-          color: var(--white);
-          background: var(--card2);
+          color: var(--ink);
+          background: var(--bg);
           border: 1px solid var(--border);
-          border-radius: 10px;
-          padding: 14px 16px;
+          border-radius: 8px;
+          padding: 11px 14px;
           outline: none;
-          transition:
-            border-color 0.2s,
-            box-shadow 0.2s;
+          transition: border-color 0.18s, background 0.18s, box-shadow 0.18s;
           width: 100%;
           appearance: none;
           -webkit-appearance: none;
         }
         .cc-field input::placeholder,
         .cc-field textarea::placeholder {
-          color: var(--muted);
+          color: #b7b3ad;
         }
         .cc-field input:focus,
         .cc-field textarea:focus,
         .cc-field select:focus {
-          border-color: rgba(200, 16, 46, 0.5);
+          border-color: var(--red);
+          background: #fff;
           box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.08);
         }
         .cc-field textarea {
           resize: none;
-          min-height: 120px;
-          line-height: 1.6;
+          min-height: 110px;
+          line-height: 1.55;
         }
 
         /* UPLOAD */
         .cc-upload-label {
           display: flex;
           align-items: center;
-          gap: 12px;
-          background: var(--card2);
-          border: 1px dashed rgba(255, 255, 255, 0.12);
-          border-radius: 10px;
-          padding: 16px;
+          gap: 14px;
+          background: var(--surface-soft);
+          border: 1.5px dashed #d5cfc8;
+          border-radius: 8px;
+          padding: 18px;
           cursor: pointer;
-          transition: border-color 0.2s;
+          transition: border-color 0.18s, background 0.18s;
         }
         .cc-upload-label:hover {
-          border-color: rgba(200, 16, 46, 0.4);
+          border-color: var(--red);
+          background: #fff;
         }
         .cc-upload-icon {
-          width: 36px;
-          height: 36px;
-          background: rgba(200, 16, 46, 0.1);
+          width: 38px;
+          height: 38px;
+          background: var(--red-tint);
           border-radius: 8px;
           display: flex;
           align-items: center;
@@ -867,15 +829,15 @@ export default function CustomerCareClient() {
           stroke-linejoin: round;
         }
         .cc-upload-text {
-          font-size: 13px;
-          color: var(--text);
-          font-weight: 300;
+          font-size: 11.5px;
+          color: var(--muted-soft);
         }
         .cc-upload-text strong {
-          color: var(--white);
+          color: #444;
           font-weight: 500;
           display: block;
           font-size: 13px;
+          margin-bottom: 2px;
         }
 
         /* SUBMIT */
@@ -883,43 +845,36 @@ export default function CustomerCareClient() {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          gap: 10px;
+          gap: 8px;
           background: var(--red);
           color: #fff;
-          font-family: var(--mono);
-          font-size: 11px;
-          font-weight: 500;
-          letter-spacing: 3px;
-          text-transform: uppercase;
-          padding: 16px 40px;
+          font-family: var(--body);
+          font-size: 14px;
+          font-weight: 600;
+          padding: 12px 28px;
           border: none;
-          border-radius: 10px;
+          border-radius: 8px;
           cursor: pointer;
-          transition:
-            background 0.25s,
-            box-shadow 0.25s,
-            transform 0.2s;
+          transition: background 0.18s, box-shadow 0.18s, transform 0.18s;
           align-self: flex-start;
-          margin-top: 8px;
+          margin-top: 4px;
         }
         .cc-submit svg {
-          width: 14px;
-          height: 14px;
+          width: 15px;
+          height: 15px;
           stroke: currentColor;
           fill: none;
           stroke-width: 2;
           stroke-linecap: round;
           stroke-linejoin: round;
-          transition: transform 0.2s;
+          transition: transform 0.18s;
         }
         .cc-submit:hover:not(:disabled) {
-          background: #a30d24;
-          box-shadow: 0 8px 30px var(--red-glow);
+          background: var(--red-deep);
+          box-shadow: 0 8px 24px var(--red-glow);
           transform: translateY(-1px);
         }
-        .cc-submit:hover:not(:disabled) svg {
-          transform: translateX(3px);
-        }
+        .cc-submit:hover:not(:disabled) svg { transform: translateX(2px); }
         .cc-submit:disabled {
           opacity: 0.6;
           cursor: not-allowed;
@@ -928,37 +883,37 @@ export default function CustomerCareClient() {
 
         /* MSG */
         .cc-msg {
-          padding: 14px 18px;
-          border-radius: 10px;
+          padding: 12px 16px;
+          border-radius: 8px;
           font-size: 13px;
           font-weight: 400;
           margin-top: 4px;
         }
         .cc-msg.success {
-          background: rgba(34, 197, 94, 0.08);
-          border: 1px solid rgba(34, 197, 94, 0.2);
-          color: #86efac;
+          background: #f0fdf4;
+          border: 1px solid #bbf7d0;
+          color: #166534;
         }
         .cc-msg.error {
-          background: rgba(200, 16, 46, 0.08);
-          border: 1px solid rgba(200, 16, 46, 0.2);
-          color: #fca5a5;
+          background: #fef2f2;
+          border: 1px solid #fecaca;
+          color: #991b1b;
         }
 
         /* TRACK */
         .track-result {
-          margin-top: 24px;
-          padding: 20px;
-          background: rgba(200, 16, 46, 0.05);
-          border: 1px solid rgba(200, 16, 46, 0.15);
+          margin-top: 20px;
+          padding: 16px 18px;
+          background: var(--red-tint);
+          border: 1px solid #f5c8cf;
           border-radius: 10px;
         }
         .track-status {
           display: flex;
           align-items: center;
           gap: 10px;
-          font-size: 14px;
-          color: var(--white);
+          font-size: 13.5px;
+          color: var(--ink);
         }
         .track-dot {
           width: 8px;
@@ -970,22 +925,18 @@ export default function CustomerCareClient() {
           animation: ccPulse 2s infinite;
         }
         @keyframes ccPulse {
-          0%,
-          100% {
-            box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
-          }
-          50% {
-            box-shadow: 0 0 14px rgba(34, 197, 94, 0.8);
-          }
+          0%, 100% { box-shadow: 0 0 8px rgba(34, 197, 94, 0.5); }
+          50%      { box-shadow: 0 0 14px rgba(34, 197, 94, 0.8); }
         }
 
         /* DIVIDER */
         .cc-divider {
           display: flex;
           align-items: center;
-          gap: 20px;
-          margin: 52px 0 40px;
-          animation: ccFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both;
+          gap: 18px;
+          max-width: 640px;
+          margin: 44px auto 28px;
+          animation: ccFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.22s both;
         }
         .cc-divider-line {
           flex: 1;
@@ -993,11 +944,11 @@ export default function CustomerCareClient() {
           background: var(--border);
         }
         .cc-divider-text {
-          font-family: var(--mono);
-          font-size: 10px;
-          letter-spacing: 4px;
+          font-size: 11px;
+          font-weight: 500;
+          letter-spacing: 0.14em;
           text-transform: uppercase;
-          color: var(--muted);
+          color: var(--muted-soft);
           white-space: nowrap;
         }
 
@@ -1006,58 +957,37 @@ export default function CustomerCareClient() {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
           gap: 16px;
-          animation: ccFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+          max-width: 640px;
+          margin: 0 auto;
+          animation: ccFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.28s both;
         }
         .cc-contact-card {
-          background: var(--card);
+          background: #fff;
           border: 1px solid var(--border);
-          border-radius: 20px;
-          padding: 32px 24px;
+          border-radius: 14px;
+          padding: 24px 18px;
           text-align: center;
-          transition:
-            border-color 0.25s,
-            transform 0.25s,
-            box-shadow 0.25s;
-          position: relative;
-          overflow: hidden;
+          transition: box-shadow 0.18s, transform 0.18s, border-color 0.18s;
           text-decoration: none;
           color: inherit;
-          display: block;
-        }
-        .cc-contact-card::before {
-          content: "";
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          height: 2px;
-          background: linear-gradient(90deg, transparent, var(--red), transparent);
-          opacity: 0;
-          transition: opacity 0.3s;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
         }
         .cc-contact-card:hover {
-          border-color: rgba(200, 16, 46, 0.3);
-          transform: translateY(-4px);
-          box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
-          color: var(--white);
-        }
-        .cc-contact-card:hover::before {
-          opacity: 1;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
+          transform: translateY(-2px);
+          border-color: #ddd6cf;
         }
         .cc-contact-icon {
-          width: 52px;
-          height: 52px;
-          background: rgba(200, 16, 46, 0.08);
-          border: 1px solid rgba(200, 16, 46, 0.15);
-          border-radius: 14px;
+          width: 44px;
+          height: 44px;
+          background: var(--red-tint);
+          border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          margin: 0 auto 16px;
-          transition: background 0.25s;
-        }
-        .cc-contact-card:hover .cc-contact-icon {
-          background: rgba(200, 16, 46, 0.15);
+          margin: 0 auto 12px;
         }
         .cc-contact-icon svg {
           width: 20px;
@@ -1070,79 +1000,63 @@ export default function CustomerCareClient() {
         }
         .cc-contact-card h3 {
           font-family: var(--display);
-          font-size: 17px;
-          font-weight: 700;
-          color: var(--white);
+          font-size: 15px;
+          font-weight: 600;
+          color: var(--ink);
           margin-bottom: 6px;
         }
         .cc-contact-card p {
-          font-size: 13px;
-          color: var(--text);
-          font-weight: 300;
-          line-height: 1.6;
-          margin-bottom: 20px;
+          font-size: 12.5px;
+          color: var(--muted);
+          line-height: 1.55;
+          margin-bottom: 16px;
         }
         .cc-contact-btn {
           display: inline-flex;
           align-items: center;
           justify-content: center;
           gap: 6px;
-          background: var(--red);
+          background: var(--ink);
           color: #fff;
-          font-family: var(--mono);
-          font-size: 10px;
-          font-weight: 500;
-          letter-spacing: 2px;
+          font-family: var(--body);
+          font-size: 11.5px;
+          font-weight: 600;
+          letter-spacing: 0.08em;
           text-transform: uppercase;
-          padding: 11px 24px;
-          border-radius: 8px;
+          padding: 8px 16px;
+          border-radius: 6px;
           width: 100%;
+          margin-top: auto;
+          transition: background 0.18s;
         }
         .cc-contact-card:hover .cc-contact-btn {
-          background: #a30d24;
-          box-shadow: 0 4px 20px var(--red-glow);
+          background: var(--red);
         }
 
         @keyframes ccFadeUp {
-          from {
-            opacity: 0;
-            transform: translateY(28px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(20px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
 
         @media (max-width: 768px) {
-          .cc-wrap {
-            padding: 60px 20px 80px;
-          }
-          .cc-form-card {
-            padding: 28px 20px;
-          }
-          .cc-row {
-            grid-template-columns: 1fr;
-          }
-          .cc-contact {
-            grid-template-columns: 1fr;
-          }
+          .cc-wrap { padding: 40px 20px 80px; }
+          .cc-form-card { padding: 24px 20px; }
+          .cc-row { grid-template-columns: 1fr; }
+          .cc-contact { grid-template-columns: 1fr; }
           .cc-tabs {
-            flex-direction: column;
             width: 100%;
+            border-radius: 10px;
           }
-          .cc-submit {
-            width: 100%;
-          }
-          .cc-bc-wrap {
-            padding: 0 20px;
-          }
-        }
-        @media (max-width: 480px) {
           .cc-tab {
-            padding: 10px 16px;
-            font-size: 10px;
+            flex: 1;
+            justify-content: center;
+            padding: 10px 12px;
+            font-size: 12px;
           }
+          .cc-tab span { display: none; }
+          .cc-tab svg { width: 16px; height: 16px; }
+          .cc-submit { width: 100%; }
+          .cc-bc-wrap { padding: 0 20px; }
         }
       ` }} />
     </section>
