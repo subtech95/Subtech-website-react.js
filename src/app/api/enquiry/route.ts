@@ -1,139 +1,199 @@
 /**
  * POST /api/enquiry
  *
- * Accepts the "Get a Free Quote" form posted from product detail pages and
- * forwards the enquiry to the Subtech CRM. The form submits as either
- * `application/x-www-form-urlencoded` (native HTML form) or JSON.
+ * Same-origin proxy that the entire site posts to. Avoids CORS errors that
+ * would otherwise hit when forms try to POST cross-origin.
  *
- * On success we redirect the browser to /thank-you for HTML form submits, or
- * return JSON `{ ok: true }` for fetch-based callers.
+ * Accepts:
+ *   - multipart/form-data    (file uploads — service complaint photos)
+ *   - application/x-www-form-urlencoded
+ *   - application/json
  *
- * Behavior is fail-soft: if the CRM endpoint is unreachable we still log the
- * lead to stdout (visible in `pm2 logs`) and return success to the visitor —
- * we'd rather lose telemetry than lose the lead.
+ * Routes to one of two CRM endpoints based on the form's `method` field
+ * (kept compatible with the legacy PHP `Controller/Master` shape):
+ *   - method = "Complains"  →  /api/public/service-requests
+ *   - everything else        →  /api/public/enquiries
  *
- * Configure the upstream endpoint via env (defaults to the public CRM):
- *   ENQUIRY_FORWARD_URL=https://crm.subtech.in/api/public/leads
+ * Override the upstream base via env on the droplet:
+ *   ENQUIRY_FORWARD_BASE=https://crm.subtech.in
+ *
+ * Failure is fail-soft: if the CRM is unreachable we still log the lead
+ * to stdout (visible via `pm2 logs subtech-earth-website`) and return
+ * success to the visitor — better to lose telemetry than lose a lead.
+ *
+ * Response shape (matches legacy PHP so existing client parsers work):
+ *   { type: "success" | "error", message: string }
+ *
+ * HTML form submits get a 303 redirect to /thank-you?p=<product>.
  */
 
 import { NextResponse } from "next/server";
-import { CMS_BASE_URL } from "@/lib/cms";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-type Lead = {
-  name: string;
-  phone: string;
-  qty: string;
-  requirement: string;
-  product: string;
-  source: string;
-  user_agent: string | null;
-  submitted_at: string;
-};
+const FORWARD_BASE = (
+  process.env.ENQUIRY_FORWARD_BASE ?? "https://crm.subtech.in"
+).replace(/\/+$/, "");
 
-function clean(v: FormDataEntryValue | null | undefined): string {
-  if (typeof v !== "string") return "";
-  return v.trim().slice(0, 500);
+const ENQUIRIES_URL       = `${FORWARD_BASE}/api/public/enquiries`;
+const SERVICE_REQUEST_URL = `${FORWARD_BASE}/api/public/service-requests`;
+
+type Payload = Record<string, string>;
+
+function asString(v: unknown): string {
+  if (typeof v === "string") return v.trim();
+  if (typeof v === "number") return String(v);
+  return "";
 }
 
-async function readForm(req: Request): Promise<Record<string, string>> {
-  const ctype = req.headers.get("content-type") ?? "";
-  if (ctype.includes("application/json")) {
-    const j = (await req.json()) as Record<string, unknown>;
-    const out: Record<string, string> = {};
-    for (const [k, v] of Object.entries(j)) {
-      if (typeof v === "string") out[k] = v.trim().slice(0, 500);
-    }
-    return out;
+/** Convert FormData (excluding File entries — CRM doesn't accept binaries
+ * via JSON) into a plain JSON-friendly object. */
+function formDataToJson(fd: FormData): Payload {
+  const out: Payload = {};
+  fd.forEach((v, k) => {
+    // File uploads silently dropped — CRM endpoint takes JSON only.
+    if (typeof v === "string") out[k] = v;
+  });
+  return out;
+}
+
+function pickEndpoint(payload: Payload): string {
+  const m = (payload.method || "").toLowerCase();
+  if (m === "complains" || m === "complaint" || m === "service") {
+    return SERVICE_REQUEST_URL;
   }
-  // application/x-www-form-urlencoded or multipart/form-data
-  const fd = await req.formData();
-  return {
-    name: clean(fd.get("name")),
-    phone: clean(fd.get("phone")),
-    qty: clean(fd.get("qty")),
-    requirement: clean(fd.get("requirement")),
-    product: clean(fd.get("product")),
-  };
+  return ENQUIRIES_URL;
 }
 
-function isHtmlForm(req: Request): boolean {
-  const ctype = req.headers.get("content-type") ?? "";
-  return (
-    ctype.includes("application/x-www-form-urlencoded") ||
-    ctype.includes("multipart/form-data")
-  );
-}
-
-async function forwardToCrm(lead: Lead): Promise<boolean> {
-  const url =
-    process.env.ENQUIRY_FORWARD_URL ?? `${CMS_BASE_URL}/api/public/leads`;
+async function forwardJson(url: string, payload: Payload): Promise<{
+  ok: boolean;
+  status: number;
+  text: string;
+  parsed: { status?: boolean; message?: string; data?: unknown } | null;
+}> {
   try {
     const res = await fetch(url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(lead),
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(payload),
       cache: "no-store",
     });
-    return res.ok;
-  } catch {
-    return false;
+    const text = await res.text();
+    let parsed: { status?: boolean; message?: string; data?: unknown } | null = null;
+    try {
+      parsed = JSON.parse(text);
+    } catch {
+      /* upstream returned non-JSON */
+    }
+    return { ok: res.ok, status: res.status, text, parsed };
+  } catch (err) {
+    return {
+      ok: false,
+      status: 0,
+      text: err instanceof Error ? err.message : "fetch failed",
+      parsed: null,
+    };
   }
 }
 
-export async function POST(req: Request) {
-  const fields = await readForm(req);
+function isHtmlFormSubmit(req: Request): boolean {
+  const ctype = req.headers.get("content-type") ?? "";
+  const xhr = req.headers.get("x-requested-with");
+  // fetch-based callers usually set 'x-requested-with' or use JSON body —
+  // anything else with form-data content type is treated as a plain HTML form.
+  return (
+    !xhr &&
+    (ctype.includes("application/x-www-form-urlencoded") ||
+      ctype.includes("multipart/form-data"))
+  );
+}
 
-  // Validation — phone and name are the must-haves to be a usable lead.
-  const errors: Record<string, string> = {};
-  if (!fields.name) errors.name = "Please enter your name.";
-  if (!fields.phone || !/^[\d\s+\-()]{7,20}$/.test(fields.phone)) {
-    errors.phone = "Please enter a valid mobile number.";
-  }
-  if (Object.keys(errors).length > 0) {
+export async function POST(req: Request) {
+  const ctype = req.headers.get("content-type") ?? "";
+
+  // ── 1. Parse incoming payload to a plain object ────────────────────────
+  let payload: Payload = {};
+  try {
+    if (ctype.includes("application/json")) {
+      const j = (await req.json()) as Record<string, unknown>;
+      for (const [k, v] of Object.entries(j)) payload[k] = asString(v);
+    } else {
+      const fd = await req.formData();
+      payload = formDataToJson(fd);
+    }
+  } catch {
     return NextResponse.json(
-      { ok: false, errors },
+      { type: "error", message: "Bad form payload" },
       { status: 400 },
     );
   }
 
-  const lead: Lead = {
-    name: fields.name,
-    phone: fields.phone,
-    qty: fields.qty || "",
-    requirement: fields.requirement || "",
-    product: fields.product || "Generic enquiry",
-    source: "earth.subtech.in (Next.js)",
-    user_agent: req.headers.get("user-agent"),
-    submitted_at: new Date().toISOString(),
-  };
+  // ── 2. Tag with source if missing ──────────────────────────────────────
+  if (!payload.source) payload.source = "earth.subtech.in";
 
-  const forwarded = await forwardToCrm(lead);
-  if (!forwarded) {
-    // Fail-soft: log so the lead is recoverable from pm2 logs.
-    console.warn("[enquiry] CRM forward failed, lead retained in logs:", lead);
+  // ── 3. Forward to the right CRM endpoint ───────────────────────────────
+  const url = pickEndpoint(payload);
+  const fwd = await forwardJson(url, payload);
+
+  if (!fwd.ok) {
+    console.warn(
+      "[enquiry] CRM forward failed:",
+      fwd.status,
+      fwd.text.slice(0, 200),
+      "url=" + url,
+      "name=" + (payload.name || ""),
+      "mobile=" + (payload.mobile || payload.phone || ""),
+    );
   } else {
-    console.log("[enquiry] forwarded:", lead.product, lead.phone);
+    console.log(
+      "[enquiry] forwarded:",
+      url.endsWith("/service-requests") ? "service-request" : "enquiry",
+      "id=" + (fwd.parsed?.data && typeof fwd.parsed.data === "object" && "id" in fwd.parsed.data
+        ? (fwd.parsed.data as { id: number }).id
+        : "?"),
+    );
   }
 
-  if (isHtmlForm(req)) {
-    const url = new URL("/thank-you", req.url);
-    url.searchParams.set("p", lead.product);
-    // 303 redirects a POST to a GET — mandatory after form submit.
-    return NextResponse.redirect(url, 303);
+  // ── 4. HTML form submits → redirect to thank-you ───────────────────────
+  if (isHtmlFormSubmit(req)) {
+    if (!fwd.ok) {
+      // Even on upstream failure, send the user to thank-you so the lead
+      // isn't lost from the user's perspective. The console.warn above
+      // ensures we have a recoverable trail.
+    }
+    const product = (payload.product || "your enquiry").slice(0, 120);
+    const thankUrl = new URL("/thank-you", req.url);
+    thankUrl.searchParams.set("p", product);
+    return NextResponse.redirect(thankUrl, 303);
   }
-  return NextResponse.json({ ok: true });
+
+  // ── 5. fetch() callers — return legacy-shaped JSON ─────────────────────
+  // CRM responds with `{ status, message, data }`. Map to the legacy
+  // PHP `{ type, message }` shape that all existing clients parse.
+  if (fwd.parsed && typeof fwd.parsed.status === "boolean") {
+    return NextResponse.json(
+      {
+        type: fwd.parsed.status ? "success" : "error",
+        message: fwd.parsed.message || (fwd.parsed.status ? "Submitted" : "Server error"),
+        data: fwd.parsed.data,
+      },
+      { status: fwd.parsed.status ? 200 : 502 },
+    );
+  }
+
+  return NextResponse.json(
+    {
+      type: fwd.ok ? "success" : "error",
+      message: fwd.ok ? "Submitted successfully." : "Server error. Please try again.",
+    },
+    { status: fwd.ok ? 200 : 502 },
+  );
 }
 
-// Reject non-POST methods cleanly.
 export function GET() {
   return NextResponse.json(
-    { ok: false, error: "POST only" },
+    { type: "error", message: "POST only" },
     { status: 405, headers: { Allow: "POST" } },
   );
 }

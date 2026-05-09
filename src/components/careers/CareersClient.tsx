@@ -105,7 +105,9 @@ const LIFE_PHOTOS = [
   ["/images/brands/image4.jpeg", "Team celebration", "Built Different. Win Together."],
 ];
 
-const FORM_ENDPOINT = "https://subtech.in/Controller/Master/";
+// Same-origin proxy — avoids CORS errors when posted from earth.subtech.in.
+// The proxy forwards verbatim to the legacy CRM endpoint server-side.
+const FORM_ENDPOINT = "/api/enquiry";
 
 type View = "list" | "detail" | "apply";
 

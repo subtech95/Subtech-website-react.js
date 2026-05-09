@@ -28,15 +28,12 @@ export default function BlogCommentForm({ blogId }: Props) {
       fd.append("fname", name);
       fd.append("email", email);
       fd.append("message", message);
+      fd.append("source", "earth.subtech.in blog comment");
 
-      const url =
-        process.env.NEXT_PUBLIC_CRM_URL?.replace(/\/+$/, "") ||
-        "https://crm.subtech.in";
-
-      await fetch(`${url}/Controller/Master/`, {
+      // Same-origin proxy — see /api/enquiry/route.ts.
+      await fetch("/api/enquiry", {
         method: "POST",
         body: fd,
-        mode: "no-cors",
       });
 
       setState("ok");

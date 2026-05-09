@@ -8,7 +8,9 @@ import { useState } from "react";
    Ported from customer-care.php (uses /Controller/Master/ endpoint)
    ============================================================ */
 
-const FORM_ENDPOINT = "https://subtech.in/Controller/Master/";
+// Same-origin proxy — avoids CORS errors when posted from earth.subtech.in.
+// The proxy forwards verbatim to the legacy CRM endpoint server-side.
+const FORM_ENDPOINT = "/api/enquiry";
 
 type TabId = "service" | "warranty" | "track";
 

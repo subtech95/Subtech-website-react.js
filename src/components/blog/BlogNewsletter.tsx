@@ -21,15 +21,13 @@ export default function BlogNewsletter() {
       const fd = new FormData();
       fd.append("email", email);
       fd.append("method", "Subscribe");
+      fd.append("source", "earth.subtech.in newsletter");
 
-      const url =
-        process.env.NEXT_PUBLIC_CRM_URL?.replace(/\/+$/, "") ||
-        "https://crm.subtech.in";
-
-      await fetch(`${url}/Controller/Master/`, {
+      // Same-origin proxy avoids the CORS pre-flight that broke the original
+      // direct POST to https://subtech.in/Controller/Master/.
+      await fetch("/api/enquiry", {
         method: "POST",
         body: fd,
-        mode: "no-cors",
       });
 
       setStatus("ok");
