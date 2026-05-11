@@ -65,7 +65,7 @@ const PRODUCT_DATA: ProductGroup[] = [
         name: "Automatic Changeover",
         slug: "automatic-changeover",
         items: [
-          { name: "Three Phase", href: "/products/power-and-energy-managment#automatic-changeover" },
+          { name: "Single Phase", href: "/products/power-and-energy-managment#automatic-changeover" },
         ],
       },
       {
@@ -79,7 +79,7 @@ const PRODUCT_DATA: ProductGroup[] = [
         name: "Three Phase Motor Starter",
         slug: "three-phase-motor-starter",
         items: [
-          { name: "Three Phase", href: "/products/power-and-energy-managment#three-phase-motor-starter" },
+          { name: "Fully Automatic", href: "/products/power-and-energy-managment#three-phase-motor-starter" },
         ],
       },
     ],
