@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Power And Energy Management Panels | Subtech",
   description:
-    "AMF panels, automatic changeover, GSP and three-phase motor starters from Subtech — built for reliable backup power and generator integration.",
+    "AMF panels for Honda gensets, automatic changeover, GSP and three-phase motor starters from Subtech — built for reliable backup power and generator integration.",
   alternates: {
     canonical: "https://subtech.in/products/power-and-energy-managment",
   },
@@ -15,6 +15,173 @@ export const metadata: Metadata = {
    Each subcategory has its own anchored section so the navbar
    dropdown can deep-link to the right block.
    ============================================================ */
+
+type Spec = { label: string; value: string };
+
+type AmfVariant = {
+  id: string;
+  name: string;
+  model: string;
+  shortName: string;
+  blurb: string;
+  specs: Spec[];
+  highlights?: string[]; // variant-specific extras (added on top of shared)
+  image: string; // expected image path (placeholder if missing)
+  enquirySubject: string;
+};
+
+/* ───────── AMF section data ───────── */
+
+const AMF_HERO = {
+  headline: "Never lose power again.",
+  intro:
+    "Subtech's PMC-based AMF Panel detects mains failure instantly and auto-starts your petrol generator within seconds. When mains power restores, it shuts the genset down automatically. Zero manual effort. Zero downtime.",
+  pmcCallout: {
+    title: "What Makes It Different?",
+    body:
+      "Built with Subtech's proprietary PMC (Pre Magnetic Contactor) technology — the contactor coil activates for just 1 second, making it virtually maintenance-free with no chattering, no coil burning, and smooth switching even at low or high voltages.",
+  },
+};
+
+const AMF_SHARED_HIGHLIGHTS: string[] = [
+  "Auto Start and Auto Stop genset on mains failure and restoration",
+  "Compatible with electronic controller and old key-type gensets",
+  "Inbuilt battery charger keeps genset battery always ready",
+  "Audio-visual alarm on genset faults",
+  "Auto and Manual mode with remote operation provision",
+  "3 cranking attempts at 15 sec intervals for reliable starting",
+  "Powder-coated GI box, wall-mount, compact and rust-resistant",
+  "PMC technology — no chattering, no coil burning, smooth switching",
+];
+
+const AMF_VARIANTS: AmfVariant[] = [
+  {
+    id: "amf-40a-eu30is-3p",
+    name: "40 Amp EU30iS — Three Phase Three Pole",
+    shortName: "40 A · EU30iS · 3-Pole",
+    model: "Honda EU30iS",
+    blurb:
+      "Auto-starts your Honda EU30iS petrol generator on power failure and switches back when mains restore. No manual operation needed.",
+    specs: [
+      { label: "Compatible Model", value: "Honda EU30iS" },
+      { label: "Current Rating", value: "40 Amp" },
+      { label: "Configuration", value: "3-Pole" },
+      { label: "Operating Voltage", value: "140 to 280 VAC (P-N)" },
+      { label: "Generator Capacity", value: "Up to 7.5 kVA (Petrol)" },
+      { label: "Mains Input", value: "Single Phase / Three Phase" },
+    ],
+    image: "/images/products/amf-honda-40a.png",
+    enquirySubject: "AMF Panel — 40A EU30iS (3-Pole) enquiry",
+  },
+  {
+    id: "amf-63a-eu70is-3p",
+    name: "63 Amp EU70iS — Three Phase Three Pole",
+    shortName: "63 A · EU70iS · 3-Pole",
+    model: "Honda EU70iS",
+    blurb:
+      "Three Phase Power Backup, fully automatic. Handles three phase mains input with single phase generator output. Auto-starts on mains failure and switches back seamlessly when power restores.",
+    specs: [
+      { label: "Compatible Model", value: "Honda EU70iS" },
+      { label: "Current Rating", value: "63 Amp" },
+      { label: "Configuration", value: "3-Pole" },
+      { label: "Phase", value: "Three Phase" },
+      { label: "Mains Input", value: "Three Phase" },
+      { label: "Generator Output", value: "Single Phase" },
+    ],
+    highlights: [
+      "3-pole three phase configuration",
+      "Three phase mains input with single phase generator output",
+    ],
+    image: "/images/products/amf-honda-63a-3p.png",
+    enquirySubject: "AMF Panel — 63A EU70iS (3-Pole) enquiry",
+  },
+  {
+    id: "amf-63a-eu70is-4p",
+    name: "63 Amp EU70iS — Three Phase Four Pole",
+    shortName: "63 A · EU70iS · 4-Pole",
+    model: "Honda EU70iS",
+    blurb:
+      "Complete three phase protection with neutral switching — the safest configuration for sensitive equipment and critical loads. Recommended for hospitals, data centers and sensitive equipment.",
+    specs: [
+      { label: "Compatible Model", value: "Honda EU70iS" },
+      { label: "Current Rating", value: "63 Amp" },
+      { label: "Configuration", value: "4-Pole" },
+      { label: "Phase", value: "Three Phase" },
+      { label: "Neutral Switching", value: "Yes — full isolation" },
+      { label: "Recommended For", value: "Hospitals, Data Centers" },
+    ],
+    highlights: [
+      "4-pole three phase configuration with neutral switching",
+      "Full isolation of mains and generator supply",
+      "Recommended for hospitals, data centers and sensitive equipment",
+    ],
+    image: "/images/products/amf-honda-63a-4p.png",
+    enquirySubject: "AMF Panel — 63A EU70iS (4-Pole) enquiry",
+  },
+];
+
+/* ───────── Shared "who / applications / FAQ" content ───────── */
+
+const WHO_SHOULD_BUY: { icon: string; title: string; desc: string }[] = [
+  {
+    icon: "factory",
+    title: "Industrial Units & Factories",
+    desc: "Manufacturing plants needing reliable auto-backup from a petrol generator when mains fail.",
+  },
+  {
+    icon: "leaf",
+    title: "Agricultural & Farming",
+    desc: "Farms, dairies, poultry — keep critical loads running on Honda gensets without manual switching.",
+  },
+  {
+    icon: "tools",
+    title: "Contractors & Builders",
+    desc: "Site offices, construction zones and temporary installations needing hands-free backup.",
+  },
+  {
+    icon: "building",
+    title: "Commercial Establishments",
+    desc: "Hotels, hospitals, offices and shops — uninterrupted operation during power cuts.",
+  },
+];
+
+const APPLICATIONS: string[] = [
+  "Auto-backup for petrol generators (Honda EU30iS / EU70iS)",
+  "Site offices and remote installations with unreliable mains",
+  "Telecom shelters and small commercial outlets",
+  "Farm houses and irrigation control rooms",
+  "Hospitals and data centers (use 4-Pole model for neutral switching)",
+  "Generator-mains transfer for small and mid-size industries",
+];
+
+const AMF_FAQ: { q: string; a: string }[] = [
+  {
+    q: "What is the warranty on the AMF Panel?",
+    a: "12 months from date of invoice against manufacturing defects, covering all electronic components and the enclosure.",
+  },
+  {
+    q: "Can I get a customised version?",
+    a: "Yes — current rating, voltage cutoffs, generator type and panel size can be customised for bulk orders. Contact our sales team with your requirement.",
+  },
+  {
+    q: "What is the delivery time?",
+    a: "Standard models ship within 3-5 working days. Customised panels take 10-15 working days depending on the BOM.",
+  },
+  {
+    q: "Is installation support available?",
+    a: "Yes. Our service team supports installation through certified electricians across India. Remote commissioning guidance is also available.",
+  },
+  {
+    q: "Can I buy this product in bulk for my project?",
+    a: "Absolutely. Project / dealer pricing is available for quantities above 10 units. Share your single-line diagram or load list and we will quote within 24 hours.",
+  },
+  {
+    q: "What's the difference between 3-Pole and 4-Pole?",
+    a: "3-Pole switches the three line conductors. 4-Pole also switches the neutral, fully isolating mains and generator supplies — the safer option for hospitals, data centers and sensitive electronic equipment.",
+  },
+];
+
+/* ───────── Other Power & Energy stubs ───────── */
 
 type SubcategoryStub = {
   id: string;
@@ -51,80 +218,7 @@ const PLACEHOLDER_STUBS: SubcategoryStub[] = [
   },
 ];
 
-const AMF_SPECS: { label: string; value: string }[] = [
-  { label: "Operating Voltage", value: "140 to 280 VAC (P-N)" },
-  { label: "Current Rating", value: "40 Amp / 63 Amp" },
-  { label: "Generator Capacity", value: "Up to 7.5 kVA (Petrol)" },
-  { label: "Mains Input", value: "Single Phase / Three Phase" },
-];
-
-const AMF_FEATURES: string[] = [
-  "Auto-start petrol generator on mains failure",
-  "Auto-switch back to mains when power restores — no manual operation",
-  "Suitable for Honda EU30iS and similar petrol gensets up to 7.5 kVA",
-  "Three Phase Three Pole switching for balanced load transfer",
-  "Wide operating voltage 140-280 VAC keeps the panel reliable on weak grids",
-  "Current rating selectable: 40 A / 63 A versions",
-  "LED indications for Mains, Generator, Load",
-  "Powder-coated rust-free metal enclosure",
-];
-
-const WHO_SHOULD_BUY: { icon: string; title: string; desc: string }[] = [
-  {
-    icon: "factory",
-    title: "Industrial Units & Factories",
-    desc: "Manufacturing plants needing reliable auto-backup from a petrol generator when mains fail.",
-  },
-  {
-    icon: "leaf",
-    title: "Agricultural & Farming",
-    desc: "Farms, dairies, poultry — keep critical loads running on Honda gensets without manual switching.",
-  },
-  {
-    icon: "tools",
-    title: "Contractors & Builders",
-    desc: "Site offices, construction zones and temporary installations needing hands-free backup.",
-  },
-  {
-    icon: "building",
-    title: "Commercial Establishments",
-    desc: "Hotels, hospitals, offices and shops — uninterrupted operation during power cuts.",
-  },
-];
-
-const APPLICATIONS: string[] = [
-  "Auto-backup for petrol generators (Honda EU30iS class)",
-  "Site offices and remote installations with unreliable mains",
-  "Telecom shelters and small commercial outlets",
-  "Farm houses and irrigation control rooms",
-  "Emergency lighting and ICU/critical load backup",
-  "Generator-mains transfer for small industries",
-];
-
-const AMF_FAQ: { q: string; a: string }[] = [
-  {
-    q: "What is the warranty on the AMF Panel?",
-    a: "12 months from date of invoice against manufacturing defects, covering all electronic components and the enclosure.",
-  },
-  {
-    q: "Can I get a customised version?",
-    a: "Yes — current rating, voltage cutoffs, generator type and panel size can be customised for bulk orders. Contact our sales team with your requirement.",
-  },
-  {
-    q: "What is the delivery time?",
-    a: "Standard models ship within 3-5 working days. Customised panels take 10-15 working days depending on the BOM.",
-  },
-  {
-    q: "Is installation support available?",
-    a: "Yes. Our service team supports installation through certified electricians across India. Remote commissioning guidance is also available.",
-  },
-  {
-    q: "Can I buy this product in bulk for my project?",
-    a: "Absolutely. Project / dealer pricing is available for quantities above 10 units. Share your single-line diagram or load list and we will quote within 24 hours.",
-  },
-];
-
-/* ───────── tiny icon components for the Who-Should-Buy grid ───────── */
+/* ───────── tiny icon components ───────── */
 function WhoIcon({ name }: { name: string }) {
   const common = {
     width: 22,
@@ -166,29 +260,32 @@ function WhoIcon({ name }: { name: string }) {
   return null;
 }
 
-/* ───────── placeholder block for products without a photo yet ───────── */
-function ProductPlaceholder({ name }: { name: string }) {
+function ProductPlaceholder({ name, compact = false }: { name: string; compact?: boolean }) {
   return (
-    <div className="aspect-square w-full rounded-2xl border border-dashed border-[#d8d4cf] bg-[#f5f5f3] flex flex-col items-center justify-center text-center px-6">
+    <div
+      className={`${
+        compact ? "aspect-[4/3]" : "aspect-square"
+      } w-full rounded-2xl border border-dashed border-[#d8d4cf] bg-[#f5f5f3] flex flex-col items-center justify-center text-center px-6`}
+    >
       <svg
-        width="44"
-        height="44"
+        width={compact ? 36 : 44}
+        height={compact ? 36 : 44}
         viewBox="0 0 24 24"
         fill="none"
         stroke="#bfbab3"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="mb-3"
+        className="mb-2.5"
       >
         <rect x="3" y="4" width="18" height="16" rx="2" />
         <path d="M7 8h10M7 12h6M7 16h4" />
         <circle cx="17" cy="16" r="1.5" />
       </svg>
-      <div className="text-[11px] font-semibold tracking-[0.18em] uppercase text-[#a8a39a] mb-1">
+      <div className="text-[10.5px] font-semibold tracking-[0.15em] uppercase text-[#a8a39a] mb-0.5 leading-tight">
         {name}
       </div>
-      <div className="text-[11px] text-[#bfbab3]">Photo coming soon</div>
+      <div className="text-[10.5px] text-[#bfbab3]">Photo coming soon</div>
     </div>
   );
 }
@@ -220,86 +317,133 @@ export default function PowerEnergyPage() {
             Power And Energy Management
           </h1>
           <p className="text-[#3a3a3a] text-[16px] leading-[1.7]">
-            AMF panels, automatic changeover units, generator synchronisation
-            and heavy-duty three-phase starters — built to keep your facility
-            running through power cuts and generator-mains transitions.
+            AMF panels for Honda petrol gensets, automatic changeover units,
+            generator synchronisation panels and heavy-duty three-phase
+            starters — built to keep your facility running through power cuts
+            and generator-mains transitions.
           </p>
         </div>
 
-        {/* ===== AMF PANEL (FOR HONDA) ===== */}
+        {/* ============================================================
+            AMF PANEL (FOR HONDA) — full section with 3 variants
+            ============================================================ */}
         <section id="amf-panel-honda" className="scroll-mt-24 mb-24">
-          <div className="grid lg:grid-cols-2 gap-10 items-start">
-            {/* Left — image */}
-            <div className="lg:sticky lg:top-28">
-              {/*
-                Drop the real product photo at:
-                  public/images/products/amf-panel-honda.png
-                and the placeholder below will be replaced automatically.
-              */}
-              <ProductPlaceholder name="AMF Panel for Honda" />
-            </div>
+          {/* Hero copy */}
+          <div className="max-w-3xl mb-10">
+            <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-red-500 mb-3">
+              AMF Panel (for Honda) · Three Phase
+            </p>
+            <h2 className="text-[clamp(28px,3.6vw,42px)] font-bold tracking-[-0.02em] text-[#0D0D0D] mb-4 leading-[1.1]">
+              {AMF_HERO.headline}
+            </h2>
+            <p className="text-[#3a3a3a] text-[16px] leading-[1.7]">
+              {AMF_HERO.intro}
+            </p>
+          </div>
 
-            {/* Right — content */}
-            <div>
-              <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-red-500 mb-3">
-                AMF Panel (for Honda) · Three Phase
-              </p>
-              <h2 className="text-[clamp(26px,3.4vw,38px)] font-bold tracking-[-0.02em] text-[#0D0D0D] mb-4 leading-[1.15]">
-                40 Amp EU30iS AMF Panel — Three Phase Three Pole Model
-              </h2>
-              <p className="text-[#3a3a3a] text-[15.5px] leading-[1.7] mb-6">
-                Auto-starts your petrol generator on power failure and switches
-                back when mains restore. No manual operation needed. Designed
-                around the Honda EU30iS class of petrol gensets for clean,
-                hands-free backup power.
-              </p>
-
-              {/* Quick specs grid */}
-              <div className="grid sm:grid-cols-2 gap-3 mb-8">
-                {AMF_SPECS.map((s) => (
-                  <div
-                    key={s.label}
-                    className="bg-white border border-[#ececec] rounded-xl px-4 py-3"
-                  >
-                    <div className="text-[11px] font-semibold tracking-[0.14em] uppercase text-[#8a8a8a] mb-0.5">
-                      {s.label}
-                    </div>
-                    <div className="text-[14px] font-semibold text-[#0D0D0D]">
-                      {s.value}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <Link
-                href="/contact?subject=AMF%20Panel%20for%20Honda%20enquiry"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-red-500 text-white rounded-xl font-bold text-[14px] hover:bg-red-600 transition"
-              >
-                Get a Free Quote
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                  <polyline points="12 5 19 12 12 19" />
+          {/* PMC callout */}
+          <div className="bg-gradient-to-br from-[#0D0D0D] to-[#1a1a1a] text-white rounded-2xl p-8 mb-12 max-w-4xl">
+            <div className="flex items-start gap-4">
+              <div className="w-11 h-11 rounded-xl bg-red-500/15 text-red-400 flex items-center justify-center flex-shrink-0">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
                 </svg>
-              </Link>
-              <p className="text-[12.5px] text-[#767676] mt-2">
-                Quick response within 2 hours.
-              </p>
+              </div>
+              <div>
+                <h3 className="text-[18px] font-bold mb-2">
+                  {AMF_HERO.pmcCallout.title}
+                </h3>
+                <p className="text-[14px] text-white/75 leading-[1.65]">
+                  {AMF_HERO.pmcCallout.body}
+                </p>
+              </div>
             </div>
           </div>
 
-          {/* Features */}
-          <div className="mt-14">
+          {/* Shared key highlights */}
+          <div className="mb-14">
             <h3 className="text-[20px] font-bold text-[#0D0D0D] mb-5">
-              Key Features
+              Key Highlights
             </h3>
             <ul className="grid sm:grid-cols-2 gap-x-8 gap-y-3 text-[14.5px] text-[#3a3a3a]">
-              {AMF_FEATURES.map((f) => (
-                <li key={f} className="flex items-start gap-2.5">
+              {AMF_SHARED_HIGHLIGHTS.map((h) => (
+                <li key={h} className="flex items-start gap-2.5">
                   <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" />
-                  <span>{f}</span>
+                  <span>{h}</span>
                 </li>
               ))}
             </ul>
+          </div>
+
+          {/* Variant cards */}
+          <div className="mb-14">
+            <h3 className="text-[20px] font-bold text-[#0D0D0D] mb-2">
+              Available Models
+            </h3>
+            <p className="text-[13.5px] text-[#767676] mb-6">
+              Three configurations to match your generator and load profile
+            </p>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {AMF_VARIANTS.map((v) => (
+                <div
+                  key={v.id}
+                  id={v.id}
+                  className="scroll-mt-24 bg-white border border-[#ececec] rounded-2xl overflow-hidden flex flex-col"
+                >
+                  {/* Image / placeholder */}
+                  <div className="p-4 bg-[#fafafa] border-b border-[#ececec]">
+                    <ProductPlaceholder name={v.shortName} compact />
+                  </div>
+                  {/* Card body */}
+                  <div className="p-6 flex flex-col flex-1">
+                    <h4 className="text-[16px] font-bold text-[#0D0D0D] mb-2 leading-snug">
+                      {v.name}
+                    </h4>
+                    <p className="text-[13px] text-[#5a5a5a] leading-[1.6] mb-4">
+                      {v.blurb}
+                    </p>
+
+                    {/* Mini specs table */}
+                    <dl className="text-[12.5px] divide-y divide-[#f0f0f0] border-y border-[#f0f0f0] mb-5">
+                      {v.specs.map((s) => (
+                        <div
+                          key={s.label}
+                          className="grid grid-cols-[1fr,1.2fr] gap-2 py-2"
+                        >
+                          <dt className="text-[#888]">{s.label}</dt>
+                          <dd className="font-semibold text-[#0D0D0D] text-right">
+                            {s.value}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+
+                    {/* Variant-specific bullets if any */}
+                    {v.highlights && v.highlights.length > 0 && (
+                      <ul className="text-[12.5px] text-[#3a3a3a] space-y-1.5 mb-5">
+                        {v.highlights.map((h) => (
+                          <li key={h} className="flex items-start gap-2">
+                            <span className="mt-[6px] w-1 h-1 rounded-full bg-red-500 flex-shrink-0" />
+                            <span>{h}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
+                    <Link
+                      href={`/contact?subject=${encodeURIComponent(v.enquirySubject)}`}
+                      className="mt-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-red-500 text-white rounded-lg font-bold text-[13px] hover:bg-red-600 transition"
+                    >
+                      Get a Free Quote
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                      </svg>
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Who should buy */}
@@ -336,7 +480,7 @@ export default function PowerEnergyPage() {
               Applications & Use Cases
             </h3>
             <p className="text-[13.5px] text-[#767676] mb-6">
-              Where this panel works best
+              Where the AMF panel range works best
             </p>
             <ol className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {APPLICATIONS.map((app, i) => (
