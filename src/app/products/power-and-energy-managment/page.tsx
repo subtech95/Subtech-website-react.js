@@ -95,6 +95,7 @@ const AMF_VARIANTS: AmfVariant[] = [
       "Three phase mains input with single phase generator output",
     ],
     image: "/images/products/amf-honda-63a-3p.png",
+    hasImage: true,
     enquirySubject: "AMF Panel — 63A EU70iS (3-Pole) enquiry",
   },
   {
