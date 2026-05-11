@@ -232,33 +232,120 @@ const ATS_VARIANTS: AtsVariant[] = [
   },
 ];
 
-/* ───────── Other Power & Energy stubs ───────── */
+/* ───────── GSP (Generator Synchronised Panel) section data ───────── */
 
-type SubcategoryStub = {
-  id: string;
-  name: string;
-  type: string;
-  blurb: string;
-  image: string;
+const GSP_HERO = {
+  headline: "Run Two Generators as One. Get Double the Power.",
+  intro:
+    "Subtech's Generator Synchronisation Panel (GSP) is built exclusively for Honda EU70iS and EU30iS inverter generators. It safely connects two generators in parallel and syncs their output to your load — giving you up to 11 kVA from two compact portable gensets.",
+  subIntro:
+    "Perfect when you need more power but have less space. Ideal for balconies, small backyards, corridors and commercial office buildings where a large generator simply cannot fit. Plug-and-play with a user-friendly interface.",
 };
 
-const PLACEHOLDER_STUBS: SubcategoryStub[] = [
+const GSP_HIGHLIGHTS: string[] = [
+  "Parallel operation of two Honda inverter generators up to 11 kVA",
+  "Auto start and stop both generators on mains failure and restoration",
+  "Smart load management — runs one or both generators based on load",
+  "Digital display for Volt and Amp monitoring",
+  "Heavy duty ATS 63 Amp for connected load",
+  "SMPS inbuilt battery charger for both generators",
+  "Warm-up time and cool-down time protection",
+  "Overload protection for safe generator operation",
+  "Remote operation via wired remote switch",
+  "Lightweight strong metal body — robust and reliable",
+];
+
+type GspVariant = {
+  id: string;
+  name: string;
+  shortName: string;
+  blurb: string;
+  specs: Spec[];
+  image: string;
+  enquirySubject: string;
+};
+
+const GSP_VARIANTS: GspVariant[] = [
   {
-    id: "gsp",
-    name: "GSP — Generator Synchronised Panel",
-    type: "Three Phase",
+    id: "gsp-63a-eu30is-3p",
+    name: "63 Amp EU30iS GSP — Three Phase Three Pole",
+    shortName: "63 A · EU30iS · 3-Pole",
     blurb:
-      "Synchronise multiple generators or genset with mains for seamless load sharing in larger sites.",
-    image: "/images/products/gsp.png",
+      "Safely connects two Honda EU30iS inverter generators in parallel for up to 5.5 kVA combined output. Fully automatic with AMF.",
+    specs: [
+      { label: "Compatible Models", value: "Honda EU70iS and EU30iS" },
+      { label: "Operation Mode", value: "Parallel / Single Generator" },
+      { label: "Max Combined Output", value: "11 kVA" },
+      { label: "ATS Rating", value: "63 Amp" },
+      { label: "Phase", value: "Three Phase" },
+      { label: "Configuration", value: "3-Pole" },
+    ],
+    image: "/images/products/gsp-63a-eu30is-3p.png",
+    enquirySubject: "GSP — 63A EU30iS (3-Pole) enquiry",
   },
-  {
-    id: "three-phase-motor-starter",
-    name: "Three Phase Motor Starter (PEM)",
-    type: "Fully Automatic",
-    blurb:
-      "Heavy-duty three-phase starter for industrial pump and motor loads, with full protection.",
-    image: "/images/products/pem-three-phase-starter.png",
-  },
+];
+
+/* ───────── Three Phase Motor Starter (Gold Series DOL) section data ───────── */
+
+const PEM_HERO = {
+  headline: "Gold Series DOL — Remote Trip, No MCB.",
+  tagline: "Na motor jale, na starter.",
+  intro:
+    "The Subtech Gold Series DOL is a premium motor control panel that gives you Remote Trip functionality without paying for an inbuilt MCB. A cost-optimised premium starter — ideal for industrial and commercial users who already have upstream MCB protection on their main panel board.",
+  longIntro:
+    "Covers three phase motors from 1 HP up to 30 HP and delivers the core Subtech protection and reliability you expect, in a smarter, leaner package.",
+};
+
+const PEM_WHO_SHOULD_BUY: string[] = [
+  "Factories, workshops and processing units with incoming MCB panels already in place",
+  "Commercial buildings, housing societies and pump stations with upstream protection",
+  "Contractors and electrical consultants looking for cost-optimised premium starters",
+  "Buyers who want Remote Trip alerts without paying twice for MCB",
+];
+
+const PEM_HIGHLIGHTS: string[] = [
+  "Remote Trip functionality for instant fault notification",
+  "Reliable DOL starting method for three phase motors",
+  "Premium Subtech internals without duplicate MCB cost",
+  "Protection against overload, voltage fluctuation and single phasing",
+  "Digital status indicators on panel",
+  "Heavy-duty GPSP sheet enclosure, powder coated, rust-proof",
+  "Heavy-duty covered copper internal wiring",
+  "Wall-mount design — indoor or covered outdoor use",
+  "Suitable for three phase motors from 1 HP to 30 HP",
+];
+
+type DolVariantRow = {
+  ref: string;
+  hp: string;
+  kw: string;
+  relayRange: string;
+  size: string;
+  weight: string;
+  mrp: string;
+};
+
+const PEM_VARIANTS: DolVariantRow[] = [
+  { ref: "DG1",   hp: "1 to 3", kw: "2.2", relayRange: "2 to 10",  size: "300 × 225 × 110", weight: "4.0", mrp: "12,500" },
+  { ref: "DG5",   hp: "5",      kw: "3.7", relayRange: "5 to 20",  size: "300 × 225 × 110", weight: "4.0", mrp: "12,500" },
+  { ref: "DG7L",  hp: "7.5",    kw: "5.5", relayRange: "10 to 25", size: "300 × 225 × 110", weight: "4.0", mrp: "13,700" },
+  { ref: "DG10L", hp: "10",     kw: "7.5", relayRange: "15 to 35", size: "300 × 225 × 110", weight: "4.0", mrp: "13,700" },
+  { ref: "DG7",   hp: "7.5",    kw: "5.5", relayRange: "10 to 25", size: "300 × 225 × 110", weight: "4.3", mrp: "13,700" },
+  { ref: "DG10",  hp: "10",     kw: "7.5", relayRange: "15 to 35", size: "300 × 225 × 110", weight: "4.3", mrp: "13,700" },
+  { ref: "DG12",  hp: "12.5",   kw: "9.3", relayRange: "20 to 40", size: "300 × 225 × 110", weight: "4.3", mrp: "14,200" },
+  { ref: "DG15",  hp: "15",     kw: "11",  relayRange: "20 to 45", size: "350 × 250 × 120", weight: "5.5", mrp: "15,200" },
+  { ref: "DG20",  hp: "20",     kw: "15",  relayRange: "25 to 50", size: "350 × 270 × 120", weight: "5.5", mrp: "17,600" },
+  { ref: "DG30",  hp: "30",     kw: "22",  relayRange: "40 to 75", size: "300 × 400 × 130", weight: "8.0", mrp: "21,900" },
+];
+
+const PEM_WHY_SUBTECH: string[] = [
+  "25+ years in panel manufacturing, 300+ dealers pan-India",
+  "ISO 9001, 14001, 45001, 50001 certified manufacturing",
+  "CPRI tested product range",
+  "Trusted by GAIL, NTPC, DMRC, Indian Air Force, Indian Railways, Delhi Jal Board",
+  "Honda recommends Subtech for motor side protection",
+  "Subtech Soldier network of trained electricians for installation and service",
+  "Phone-based troubleshooting — 90% issues resolved without site visit",
 ];
 
 /* ───────── tiny icon components ───────── */
@@ -678,41 +765,233 @@ export default function PowerEnergyPage() {
           </div>
         </section>
 
-        {/* ===== OTHER STUB SECTIONS ===== */}
-        {PLACEHOLDER_STUBS.map((s) => (
-          <section
-            key={s.id}
-            id={s.id}
-            className="scroll-mt-24 mb-20 grid lg:grid-cols-2 gap-10 items-center"
-          >
-            <ProductPlaceholder name={s.name} />
-            <div>
-              <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-red-500 mb-3">
-                {s.type}
-              </p>
-              <h2 className="text-[clamp(24px,3vw,34px)] font-bold tracking-[-0.02em] text-[#0D0D0D] mb-4 leading-[1.15]">
-                {s.name}
-              </h2>
-              <p className="text-[#3a3a3a] text-[15px] leading-[1.7] mb-6">
-                {s.blurb}
-              </p>
-              <p className="text-[12.5px] text-[#a8a39a] mb-6 italic">
-                Detailed specs, variants and features being added. Get in touch
-                for a quote with your exact requirement.
-              </p>
-              <Link
-                href={`/contact?subject=${encodeURIComponent(s.name + " enquiry")}`}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-red-500 text-white rounded-xl font-bold text-[14px] hover:bg-red-600 transition"
-              >
-                Get a Free Quote
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                  <polyline points="12 5 19 12 12 19" />
-                </svg>
-              </Link>
+        {/* ============================================================
+            GSP — GENERATOR SYNCHRONISED PANEL
+            ============================================================ */}
+        <section id="gsp" className="scroll-mt-24 mb-24">
+          <div className="max-w-3xl mb-10">
+            <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-red-500 mb-3">
+              GSP · Generator Synchronised Panel · Three Phase
+            </p>
+            <h2 className="text-[clamp(28px,3.6vw,42px)] font-bold tracking-[-0.02em] text-[#0D0D0D] mb-4 leading-[1.1]">
+              {GSP_HERO.headline}
+            </h2>
+            <p className="text-[#3a3a3a] text-[16px] leading-[1.7] mb-4">
+              {GSP_HERO.intro}
+            </p>
+            <p className="text-[#5a5a5a] text-[15px] leading-[1.7]">
+              {GSP_HERO.subIntro}
+            </p>
+          </div>
+
+          <div className="mb-12">
+            <h3 className="text-[20px] font-bold text-[#0D0D0D] mb-5">
+              Key Highlights
+            </h3>
+            <ul className="grid sm:grid-cols-2 gap-x-8 gap-y-3 text-[14.5px] text-[#3a3a3a]">
+              {GSP_HIGHLIGHTS.map((h) => (
+                <li key={h} className="flex items-start gap-2.5">
+                  <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" />
+                  <span>{h}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="mb-10">
+            <h3 className="text-[20px] font-bold text-[#0D0D0D] mb-2">
+              Available Models
+            </h3>
+            <p className="text-[13.5px] text-[#767676] mb-6">
+              Designed for Honda EU30iS and EU70iS inverter generators
+            </p>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {GSP_VARIANTS.map((v) => (
+                <div
+                  key={v.id}
+                  id={v.id}
+                  className="scroll-mt-24 bg-white border border-[#ececec] rounded-2xl overflow-hidden flex flex-col"
+                >
+                  <div className="p-4 bg-[#fafafa] border-b border-[#ececec]">
+                    <ProductPlaceholder name={v.shortName} compact />
+                  </div>
+                  <div className="p-6 flex flex-col flex-1">
+                    <h4 className="text-[16px] font-bold text-[#0D0D0D] mb-2 leading-snug">
+                      {v.name}
+                    </h4>
+                    <p className="text-[13px] text-[#5a5a5a] leading-[1.6] mb-4">
+                      {v.blurb}
+                    </p>
+                    <dl className="text-[12.5px] divide-y divide-[#f0f0f0] border-y border-[#f0f0f0] mb-5">
+                      {v.specs.map((s) => (
+                        <div
+                          key={s.label}
+                          className="grid grid-cols-[1fr,1.2fr] gap-2 py-2"
+                        >
+                          <dt className="text-[#888]">{s.label}</dt>
+                          <dd className="font-semibold text-[#0D0D0D] text-right">
+                            {s.value}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                    <Link
+                      href={`/contact?subject=${encodeURIComponent(v.enquirySubject)}`}
+                      className="mt-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-red-500 text-white rounded-lg font-bold text-[13px] hover:bg-red-600 transition"
+                    >
+                      Get a Free Quote
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                      </svg>
+                    </Link>
+                  </div>
+                </div>
+              ))}
             </div>
-          </section>
-        ))}
+            <p className="mt-6 text-[12.5px] text-[#767676] italic max-w-2xl">
+              Same buyer profile and use cases as our AMF range — see{" "}
+              <a href="#amf-panel-honda" className="text-red-500 hover:underline not-italic font-semibold">
+                Who Should Buy
+              </a>{" "}
+              above.
+            </p>
+          </div>
+        </section>
+
+        {/* ============================================================
+            THREE PHASE MOTOR STARTER — Gold Series DOL
+            ============================================================ */}
+        <section id="three-phase-motor-starter" className="scroll-mt-24 mb-24">
+          <div className="max-w-3xl mb-10">
+            <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-red-500 mb-3">
+              Three Phase Motor Starter · Fully Automatic
+            </p>
+            <h2 className="text-[clamp(28px,3.6vw,42px)] font-bold tracking-[-0.02em] text-[#0D0D0D] mb-3 leading-[1.1]">
+              {PEM_HERO.headline}
+            </h2>
+            <p className="text-[14px] font-semibold uppercase tracking-[0.14em] text-red-500 mb-5">
+              {PEM_HERO.tagline}
+            </p>
+            <p className="text-[#3a3a3a] text-[16px] leading-[1.7] mb-4">
+              {PEM_HERO.intro}
+            </p>
+            <p className="text-[#5a5a5a] text-[15px] leading-[1.7]">
+              {PEM_HERO.longIntro}
+            </p>
+          </div>
+
+          {/* Who should buy this specific product (Gold Series) */}
+          <div className="mb-12 bg-white border border-[#ececec] rounded-2xl p-6 max-w-3xl">
+            <h3 className="text-[16px] font-bold text-[#0D0D0D] mb-3">
+              Who Should Buy This
+            </h3>
+            <ul className="space-y-2 text-[13.5px] text-[#3a3a3a]">
+              {PEM_WHO_SHOULD_BUY.map((w) => (
+                <li key={w} className="flex items-start gap-2.5">
+                  <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" />
+                  <span>{w}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Key Features */}
+          <div className="mb-12">
+            <h3 className="text-[20px] font-bold text-[#0D0D0D] mb-5">
+              Key Features
+            </h3>
+            <ul className="grid sm:grid-cols-2 gap-x-8 gap-y-3 text-[14.5px] text-[#3a3a3a]">
+              {PEM_HIGHLIGHTS.map((h) => (
+                <li key={h} className="flex items-start gap-2.5">
+                  <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" />
+                  <span>{h}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Ratings table */}
+          <div className="mb-12">
+            <h3 className="text-[20px] font-bold text-[#0D0D0D] mb-2">
+              Available Ratings
+            </h3>
+            <p className="text-[13.5px] text-[#767676] mb-6">
+              From 1 HP up to 30 HP — pick the model matching your motor rating
+            </p>
+            <div className="bg-white border border-[#ececec] rounded-2xl overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-[13px]">
+                  <thead className="bg-[#f7f7f7] text-[#0D0D0D]">
+                    <tr>
+                      <th className="text-left font-bold px-4 py-3">Ref No.</th>
+                      <th className="text-left font-bold px-4 py-3">HP</th>
+                      <th className="text-left font-bold px-4 py-3">kW</th>
+                      <th className="text-left font-bold px-4 py-3">Relay Range (A)</th>
+                      <th className="text-left font-bold px-4 py-3">Size (mm)</th>
+                      <th className="text-left font-bold px-4 py-3">Weight (kg)</th>
+                      <th className="text-right font-bold px-4 py-3">MRP (₹)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#f0f0f0]">
+                    {PEM_VARIANTS.map((row) => (
+                      <tr key={row.ref} className="hover:bg-[#fafafa]">
+                        <td className="px-4 py-3 font-semibold text-[#0D0D0D]">{row.ref}</td>
+                        <td className="px-4 py-3 text-[#3a3a3a]">{row.hp}</td>
+                        <td className="px-4 py-3 text-[#3a3a3a]">{row.kw}</td>
+                        <td className="px-4 py-3 text-[#3a3a3a]">{row.relayRange}</td>
+                        <td className="px-4 py-3 text-[#3a3a3a] whitespace-nowrap">{row.size}</td>
+                        <td className="px-4 py-3 text-[#3a3a3a]">{row.weight}</td>
+                        <td className="px-4 py-3 text-right font-semibold text-[#0D0D0D]">{row.mrp}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <p className="mt-3 text-[12px] text-[#888] italic">
+              Verify current MRP with the Subtech sales team before purchase.
+            </p>
+          </div>
+
+          {/* Why Subtech */}
+          <div className="mb-10 bg-gradient-to-br from-[#0D0D0D] to-[#1a1a1a] text-white rounded-2xl p-8">
+            <h3 className="text-[20px] font-bold mb-5">Why Subtech</h3>
+            <ul className="grid md:grid-cols-2 gap-x-8 gap-y-3 text-[13.5px] text-white/85">
+              {PEM_WHY_SUBTECH.map((w) => (
+                <li key={w} className="flex items-start gap-2.5">
+                  <svg className="mt-[3px] w-4 h-4 text-red-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                  <span>{w}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-5 text-[14px] font-bold text-red-300 tracking-[0.1em] uppercase">
+              Na Motor Jale, Na Starter.
+            </p>
+          </div>
+
+          {/* CTA */}
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/contact?subject=Gold%20Series%20DOL%20enquiry"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-red-500 text-white rounded-xl font-bold text-[14px] hover:bg-red-600 transition"
+            >
+              Get a Free Quote
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </Link>
+            <Link
+              href="/products/motor-control-solutions/three-phase-motor-starter/advanced-dol"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-white border border-[#ececec] text-[#0D0D0D] rounded-xl font-semibold text-[14px] hover:border-red-500 hover:text-red-500 transition"
+            >
+              Compare with other DOL series
+            </Link>
+          </div>
+        </section>
       </div>
     </div>
   );
