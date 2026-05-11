@@ -161,61 +161,61 @@ export default function TypeFilterClient({
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {filtered.map((s) => (
               <Link
                 key={s.slug}
                 href={s.href}
-                className="group bg-white border border-[#E8E8E8] rounded-2xl overflow-hidden hover:border-red-500 hover:shadow-[0_16px_40px_rgba(204,0,0,0.08)] hover:-translate-y-1 transition-all flex flex-col"
+                className="group bg-white border border-[#E8E8E8] rounded-xl overflow-hidden hover:border-red-500 hover:shadow-[0_12px_28px_rgba(204,0,0,0.07)] hover:-translate-y-0.5 transition-all flex flex-col"
               >
-                <div className="aspect-square bg-white overflow-hidden border-b border-[#F0F0F0] relative">
+                <div className="aspect-[4/3] bg-white overflow-hidden border-b border-[#F0F0F0] relative">
                   {s.image ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={s.image}
                       alt={s.name}
                       loading="lazy"
-                      className="w-full h-full object-contain group-hover:scale-[1.04] transition-transform duration-500"
+                      className="w-full h-full object-contain p-3 group-hover:scale-[1.04] transition-transform duration-500"
                     />
                   ) : (
-                    <div className="w-full h-full grid place-items-center text-[#CCC] text-[12px]">
+                    <div className="w-full h-full grid place-items-center text-[#CCC] text-[11px]">
                       No image
                     </div>
                   )}
-                  <span className="absolute top-3 right-3 text-[11px] font-semibold text-red-500 bg-white/90 backdrop-blur px-3 py-1.5 rounded-full shadow-sm">
+                  <span className="absolute top-2.5 right-2.5 text-[10.5px] font-semibold text-red-500 bg-white/90 backdrop-blur px-2.5 py-1 rounded-full shadow-sm">
                     {s.hpSummary}
                   </span>
                 </div>
 
-                <div className="p-6 flex flex-col flex-1">
-                  <div className="mb-4">
-                    <h2 className="text-[20px] font-bold text-[#0D0D0D] leading-snug mb-1 group-hover:text-red-500 transition">
+                <div className="p-4 flex flex-col flex-1">
+                  <div className="mb-2.5">
+                    <h2 className="text-[15.5px] font-bold text-[#0D0D0D] leading-snug mb-0.5 group-hover:text-red-500 transition">
                       {s.name}
                     </h2>
-                    <p className="text-[12px] text-[#767676] uppercase tracking-[0.05em]">
+                    <p className="text-[10.5px] text-[#767676] uppercase tracking-[0.05em]">
                       {s.tagline}
                     </p>
                   </div>
 
-                  <p className="text-[13.5px] text-[#3a3a3a] leading-[1.65] mb-5 flex-1">
+                  <p className="text-[12.5px] text-[#5a5a5a] leading-[1.55] mb-3 flex-1 line-clamp-3">
                     {s.description}
                   </p>
 
-                  <div className="flex flex-wrap gap-1.5 mb-5">
-                    {s.variantTags.map((t) => (
+                  <div className="flex flex-wrap gap-1 mb-3">
+                    {s.variantTags.slice(0, 2).map((t) => (
                       <span
                         key={t}
-                        className="text-[11px] px-2.5 py-1 bg-[#F5F5F5] text-[#3a3a3a] rounded-full"
+                        className="text-[10px] px-2 py-0.5 bg-[#F5F5F5] text-[#3a3a3a] rounded-full"
                       >
                         {t}
                       </span>
                     ))}
-                    <span className="text-[11px] px-2.5 py-1 bg-[#F5F5F5] text-[#3a3a3a] rounded-full">
+                    <span className="text-[10px] px-2 py-0.5 bg-[#F5F5F5] text-[#3a3a3a] rounded-full">
                       {s.variantCount} model{s.variantCount === 1 ? "" : "s"}
                     </span>
                   </div>
 
-                  <div className="mt-auto flex items-center justify-between text-[13.5px]">
+                  <div className="mt-auto flex items-center justify-between text-[12.5px] pt-2 border-t border-[#f4f4f4]">
                     <span className="font-semibold text-[#0D0D0D] group-hover:text-red-500 transition">
                       View Details
                     </span>
