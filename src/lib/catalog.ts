@@ -30,7 +30,7 @@ export type Series = {
   tagline: string;
   description: string;
   longDescription?: string;
-  /** Public image path under /public, e.g. "/images/products/royal.jpg". */
+  /** Public image path under /public, e.g. "/images/products/royal.png". */
   image?: string;
   features: string[];
   protections?: string[];
@@ -74,7 +74,7 @@ const baseSeries: Series = {
   slug: "base",
   name: "Base",
   tagline: "Most basic analog single-phase starter",
-  image: "/images/products/base.jpg",
+  image: "/images/products/base.png",
   description:
     "Most basic analog starter with conventional switch and single run capacitor, no auto-cut protection.",
   longDescription:
@@ -99,7 +99,7 @@ const eBaseSeries: Series = {
   slug: "e-base",
   name: "E-Base",
   tagline: "Auto-cut analog starter with push buttons",
-  image: "/images/products/e-base.jpg",
+  image: "/images/products/e-base.png",
   description:
     "Safer analog starter with push buttons, Start and Run capacitors, and auto-cut after power resumption, with Voltage check button.",
   features: [
@@ -131,7 +131,7 @@ const eBaseProSeries: Series = {
   slug: "e-base-pro",
   name: "E-Base Pro",
   tagline: "Digital-display version of E-Base with auto-cut",
-  image: "/images/products/e-base-pro.jpg",
+  image: "/images/products/e-base-pro.png",
   description:
     "Same as E-Base with a digital display replacing analog meters for better monitoring.",
   features: [
@@ -163,7 +163,7 @@ const eazyStopSeries: Series = {
   slug: "eazystop",
   name: "EazyStop",
   tagline: "Manual start, sensor-based auto stop (single sensor)",
-  image: "/images/products/eazystop.jpg",
+  image: "/images/products/eazystop.png",
   description:
     "Manual start and automatic cut-off when the tank is full, using a single sensor. Ideal for affordable water overflow protection with manual control.",
   features: [
@@ -191,7 +191,7 @@ const setStopSeries: Series = {
   slug: "setstop",
   name: "SetStop",
   tagline: "Manual start, timer-based auto stop",
-  image: "/images/products/setstop.jpg",
+  image: "/images/products/setstop.png",
   description:
     "Manually start the pump and it will automatically stop at whatever time has been set. The timer is fully adjustable. Ideal for affordable basic automation with manual control.",
   features: [
@@ -216,7 +216,7 @@ const superRoyalSeries: Series = {
   slug: "super-royal",
   name: "Super Royal",
   tagline: "Fully automatic with overflow protection",
-  image: "/images/products/royal-family.jpg",
+  image: "/images/products/super-royal.png",
   description:
     "Fully automatic motor starter with safety protections and dual tank sensors that auto start and stop the motor based on water level — ideal for customers seeking protection and complete automation.",
   longDescription:
@@ -255,7 +255,7 @@ const royalSeries: Series = {
   slug: "royal",
   name: "Royal",
   tagline: "Fully automatic single phase starter with water overflow protection",
-  image: "/images/products/royal-family.jpg",
+  image: "/images/products/royal-family.png",
   description:
     "A fully automatic, micro-controlled digital starter panel for single phase submersible pumps. Two inbuilt water tank level sensors automatically switch the motor ON/OFF based on overhead tank water level.",
   longDescription:
@@ -297,7 +297,7 @@ const miniRoyalSeries: Series = {
   slug: "mini-royal",
   name: "Mini Royal",
   tagline: "Compact fully-automatic for monoblock pumps up to 2 HP",
-  image: "/images/products/mini-royal.jpg",
+  image: "/images/products/mini-royal.png",
   description:
     "Low-cost automatic starter for monoblock pumps up to 2 HP, with full safety protections, plastic body, and sensor support for auto motor control. Ideal for budget-conscious customers and reliable operation.",
   longDescription:
@@ -334,7 +334,7 @@ const royalPlusSeries: Series = {
   slug: "royal-plus",
   name: "Royal +",
   tagline: "Two-phase fully automatic starter",
-  image: "/images/products/royal-family.jpg",
+  image: "/images/products/royal+.png",
   description:
     "Designed for two-phase motors with complete safety protections for reliable pump operation. Built mainly for locations where two-phase supply is common.",
   longDescription:
@@ -392,7 +392,7 @@ const kisanDolSeries: Series = {
   slug: "kisan-dol",
   name: "Kisan Series — DOL",
   tagline: "Smart DOL starter, knob-based, for everyday agricultural use",
-  image: "/images/products/kisan-dol.jpg",
+  image: "/images/products/kisan-dol.png",
   description:
     "Simple knob-based starter built for everyday agricultural use. Available range: 1 to 30 HP.",
   features: [
@@ -425,7 +425,7 @@ const powerMaxDolSeries: Series = {
   slug: "powermax-dol",
   name: "PowerMax Series — DOL",
   tagline: "Stronger build with inbuilt MCB for reliable daily operation",
-  image: "/images/products/powermax-dol.jpg",
+  image: "/images/products/powermax-dol.png",
   description:
     "Stronger build with inbuilt MCB for reliable daily operation. Available range: 1 to 30 HP.",
   features: [
@@ -459,7 +459,7 @@ const goldDolSeries: Series = {
   slug: "gold-dol",
   name: "Gold Series — DOL",
   tagline: "Premium remote-trip functionality without inbuilt MCB",
-  image: "/images/products/gold-dol.jpg",
+  image: "/images/products/gold-dol.png",
   description:
     "Get premium Remote Trip functionality without paying for inbuilt MCB. Ideal for industrial and commercial use.",
   features: [
@@ -492,7 +492,7 @@ const primeDolSeries: Series = {
   slug: "prime-dol",
   name: "Prime Series — DOL",
   tagline: "Top-of-the-line digital soft-switch settings with highest automation",
-  image: "/images/products/prime-dol.jpg",
+  image: "/images/products/prime-dol.png",
   description:
     "Top-of-the-line digital soft-switch settings with the highest automation and control.",
   features: [
@@ -526,7 +526,7 @@ const kisanSdSeries: Series = {
   slug: "kisan-star-delta",
   name: "Kisan Series — Star Delta",
   tagline: "Smart Star Delta starter for large irrigation pumps",
-  image: "/images/products/kisan-star-delta.jpg",
+  image: "/images/products/kisan-star-delta.png",
   description:
     "Simple knob-based Star Delta starter built for large irrigation and agricultural pumps. Starting range: 7.5 HP.",
   features: [
@@ -563,7 +563,7 @@ const powerMaxSdSeries: Series = {
   slug: "powermax-star-delta",
   name: "PowerMax Series — Star Delta",
   tagline: "Stronger build with inbuilt MCB/MCCB for industrial loads",
-  image: "/images/products/powermax-star-delta.jpg",
+  image: "/images/products/powermax-star-delta.png",
   description:
     "Stronger build with inbuilt MCB/MCCB for heavy-duty industrial and motor applications. Suitable for industrial pumps, heavy motors, and demanding irrigation work.",
   features: [
@@ -601,7 +601,7 @@ const goldSdSeries: Series = {
   slug: "gold-star-delta",
   name: "Gold Series — Star Delta",
   tagline: "Remote trip without MCB/MCCB for industrial use",
-  image: "/images/products/gold-star-delta.jpg",
+  image: "/images/products/gold-star-delta.png",
   description:
     "Adds Remote Trip functionality without MCB/MCCB for industrial and commercial use.",
   features: [
@@ -633,7 +633,7 @@ const primeSdSeries: Series = {
   slug: "prime-star-delta",
   name: "Prime Series — Star Delta",
   tagline: "Top-of-the-line digital soft-switch with external command support",
-  image: "/images/products/prime-star-delta.jpg",
+  image: "/images/products/prime-star-delta.png",
   description:
     "Top-of-the-line digital soft-switch settings with external command support and the highest automation.",
   features: [
@@ -674,7 +674,7 @@ const apcDolSeries: Series = {
   slug: "auto-phase-correction-dol",
   name: "Inbuilt Auto Phase Correction DOL",
   tagline: "Auto-corrects phase sequence for safe 3-phase motor operation",
-  image: "/images/products/apc-dol.jpg",
+  image: "/images/products/apc-dol.png",
   description:
     "Smart motor starter panel that automatically corrects phase sequence for safe and proper 3-phase motor operation.",
   features: [
@@ -709,7 +709,7 @@ const reverseForwardSeries: Series = {
   slug: "reverse-forward-dol",
   name: "Reverse Forward DOL",
   tagline: "Run motor in both forward and reverse directions",
-  image: "/images/products/apc-dol.jpg",
+  image: "/images/products/apc-dol.png",
   description:
     "Allows the motor to run in both forward and reverse directions as per application need.",
   features: [
@@ -764,7 +764,7 @@ const kisan4gDolSeries: Series = {
   slug: "kisan-4g-dol",
   name: "Kisan 4G Series — DOL",
   tagline: "Mobile-controlled DOL starter for farmers",
-  image: "/images/products/kisan-4g-dol.jpg",
+  image: "/images/products/kisan-4g-dol.png",
   description:
     "Designed by Subtech, a smart and farmer-friendly motor starter for easy pump operation through mobile phone. Start, stop, and monitor the motor remotely.",
   features: SHARED_4G_FEATURES,
@@ -788,7 +788,7 @@ const powermax4gDolSeries: Series = {
   slug: "powermax-4g-dol",
   name: "Powermax 4G Series — DOL",
   tagline: "Mobile-controlled DOL with built-in protection",
-  image: "/images/products/powermax-4g-dol.jpg",
+  image: "/images/products/powermax-4g-dol.png",
   description:
     "The Subtech PowerMax DOL Motor Control Panel is designed for reliable and efficient motor starting with built-in protection and mobile-based control. Ideal for users who need better protection, reliability, and smooth motor control.",
   features: SHARED_4G_FEATURES,
@@ -811,7 +811,7 @@ const kisan4gSdSeries: Series = {
   slug: "kisan-4g-star-delta",
   name: "Kisan 4G Series — Star Delta",
   tagline: "Mobile-controlled Star Delta starter for farmers",
-  image: "/images/products/kisan-4g-star-delta.jpg",
+  image: "/images/products/kisan-4g-star-delta.png",
   description:
     "Highly beneficial for farmers and available at an affordable price. Completely safeguards the motor against damage caused by electrical fluctuations and shows voltage and amperes coming in the electrical line.",
   features: SHARED_4G_FEATURES,
@@ -841,7 +841,7 @@ const powermax4gSdSeries: Series = {
   slug: "powermax-4g-star-delta",
   name: "Powermax 4G Series — Star Delta",
   tagline: "Mobile-controlled Star Delta with MCB/MCCB",
-  image: "/images/products/powermax-4g-star-delta.jpg",
+  image: "/images/products/powermax-4g-star-delta.png",
   description:
     "Smart motor control panel designed for smooth starting and remote operation of three-phase submersible and motor pumps. Combines 4G/mobile-based access with dependable protection, digital monitoring, and a durable panel design.",
   features: SHARED_4G_FEATURES,
