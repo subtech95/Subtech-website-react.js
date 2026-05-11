@@ -55,10 +55,31 @@ const PRODUCT_DATA: ProductGroup[] = [
     slug: "power-and-energy-managment",
     subgroups: [
       {
-        name: "Coming Soon",
-        slug: "coming-soon",
+        name: "AMF Panel (for Honda)",
+        slug: "amf-panel-honda",
         items: [
-          { name: "Talk to Sales", href: "/products/power-and-energy-managment" },
+          { name: "Three Phase", href: "/products/power-and-energy-managment#amf-panel-honda" },
+        ],
+      },
+      {
+        name: "Automatic Changeover",
+        slug: "automatic-changeover",
+        items: [
+          { name: "Three Phase", href: "/products/power-and-energy-managment#automatic-changeover" },
+        ],
+      },
+      {
+        name: "GSP (Generator Synchronised Panel)",
+        slug: "gsp",
+        items: [
+          { name: "Three Phase", href: "/products/power-and-energy-managment#gsp" },
+        ],
+      },
+      {
+        name: "Three Phase Motor Starter",
+        slug: "three-phase-motor-starter",
+        items: [
+          { name: "Three Phase", href: "/products/power-and-energy-managment#three-phase-motor-starter" },
         ],
       },
     ],
