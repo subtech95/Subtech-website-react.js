@@ -181,6 +181,57 @@ const AMF_FAQ: { q: string; a: string }[] = [
   },
 ];
 
+/* ───────── Automatic Changeover (ATS) section data ───────── */
+
+const ATS_HERO = {
+  headline: "Automatic power backup. No manual switching needed.",
+  intro:
+    "Subtech's ATS (Automatic Transfer Switch) handles your power changeover without any manual effort. When mains supply fails and your genset is running, it automatically connects the load to the generator. When mains restores, it switches back instantly — mains always gets priority.",
+};
+
+const ATS_HIGHLIGHTS: string[] = [
+  "Automatic changeover between mains and generator",
+  "Relay activates only during genset run time for longer life",
+  "Minimum changeover time to protect sensitive equipment",
+  "Time delay in generator mode for higher capacity loads",
+  "Fully automatic operation with electrical interlocking",
+  "Auxiliary contacts for portable genset stop command (IGN)",
+  "Heavy duty DMC connection terminal block",
+  "Screw tight connection for safe and reliable wiring",
+  "Powder-coated GI box, wall-mount, compact size",
+  "Long life and maintenance free",
+];
+
+type AtsVariant = {
+  id: string;
+  name: string;
+  shortName: string;
+  blurb: string;
+  specs: Spec[];
+  image: string;
+  enquirySubject: string;
+};
+
+const ATS_VARIANTS: AtsVariant[] = [
+  {
+    id: "ats-40a-ign-1ph-dp",
+    name: "40 Amp (IGN) Relay Changeover — Single Phase Two Pole",
+    shortName: "40 A · IGN · 1-Ph · DP",
+    blurb:
+      "Automatically switches load to generator on mains failure and back when power restores. Manual start, auto changeover. Suitable for 1 to 3 kVA generators.",
+    specs: [
+      { label: "Model No", value: "I-PCB011" },
+      { label: "Type", value: "Relay Based ATS" },
+      { label: "Phase", value: "Single Phase" },
+      { label: "Pole", value: "Double Pole (DP)" },
+      { label: "Current Rating", value: "40 Amp" },
+      { label: "Genset Range", value: "1 to 3 kVA" },
+    ],
+    image: "/images/products/ats-40a-ign-1ph-dp.png",
+    enquirySubject: "Automatic Changeover — 40A IGN (1-Ph DP) enquiry",
+  },
+];
+
 /* ───────── Other Power & Energy stubs ───────── */
 
 type SubcategoryStub = {
@@ -192,14 +243,6 @@ type SubcategoryStub = {
 };
 
 const PLACEHOLDER_STUBS: SubcategoryStub[] = [
-  {
-    id: "automatic-changeover",
-    name: "Automatic Changeover",
-    type: "Single Phase",
-    blurb:
-      "Auto switch between mains and inverter / second source — clean handover, no manual flipping.",
-    image: "/images/products/automatic-changeover.png",
-  },
   {
     id: "gsp",
     name: "GSP — Generator Synchronised Panel",
@@ -535,7 +578,107 @@ export default function PowerEnergyPage() {
           </div>
         </section>
 
-        {/* ===== OTHER 3 SUBCATEGORIES — STUB SECTIONS ===== */}
+        {/* ============================================================
+            AUTOMATIC CHANGEOVER (ATS)
+            ============================================================ */}
+        <section id="automatic-changeover" className="scroll-mt-24 mb-24">
+          {/* Hero copy */}
+          <div className="max-w-3xl mb-10">
+            <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-red-500 mb-3">
+              Automatic Changeover · Single Phase
+            </p>
+            <h2 className="text-[clamp(28px,3.6vw,42px)] font-bold tracking-[-0.02em] text-[#0D0D0D] mb-4 leading-[1.1]">
+              {ATS_HERO.headline}
+            </h2>
+            <p className="text-[#3a3a3a] text-[16px] leading-[1.7]">
+              {ATS_HERO.intro}
+            </p>
+          </div>
+
+          {/* Key Highlights */}
+          <div className="mb-12">
+            <h3 className="text-[20px] font-bold text-[#0D0D0D] mb-5">
+              Key Highlights
+            </h3>
+            <ul className="grid sm:grid-cols-2 gap-x-8 gap-y-3 text-[14.5px] text-[#3a3a3a]">
+              {ATS_HIGHLIGHTS.map((h) => (
+                <li key={h} className="flex items-start gap-2.5">
+                  <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" />
+                  <span>{h}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Variant card(s) */}
+          <div className="mb-10">
+            <h3 className="text-[20px] font-bold text-[#0D0D0D] mb-2">
+              Available Models
+            </h3>
+            <p className="text-[13.5px] text-[#767676] mb-6">
+              Single Phase Two Pole models for small petrol gensets
+            </p>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {ATS_VARIANTS.map((v) => (
+                <div
+                  key={v.id}
+                  id={v.id}
+                  className="scroll-mt-24 bg-white border border-[#ececec] rounded-2xl overflow-hidden flex flex-col"
+                >
+                  <div className="p-4 bg-[#fafafa] border-b border-[#ececec]">
+                    <ProductPlaceholder name={v.shortName} compact />
+                  </div>
+                  <div className="p-6 flex flex-col flex-1">
+                    <h4 className="text-[16px] font-bold text-[#0D0D0D] mb-2 leading-snug">
+                      {v.name}
+                    </h4>
+                    <p className="text-[13px] text-[#5a5a5a] leading-[1.6] mb-4">
+                      {v.blurb}
+                    </p>
+                    <dl className="text-[12.5px] divide-y divide-[#f0f0f0] border-y border-[#f0f0f0] mb-5">
+                      {v.specs.map((s) => (
+                        <div
+                          key={s.label}
+                          className="grid grid-cols-[1fr,1.2fr] gap-2 py-2"
+                        >
+                          <dt className="text-[#888]">{s.label}</dt>
+                          <dd className="font-semibold text-[#0D0D0D] text-right">
+                            {s.value}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                    <Link
+                      href={`/contact?subject=${encodeURIComponent(v.enquirySubject)}`}
+                      className="mt-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-red-500 text-white rounded-lg font-bold text-[13px] hover:bg-red-600 transition"
+                    >
+                      Get a Free Quote
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                      </svg>
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Note linking to shared who/applications */}
+            <p className="mt-6 text-[12.5px] text-[#767676] italic max-w-2xl">
+              Same buyer profile and use cases as our AMF range — see{" "}
+              <a href="#amf-panel-honda" className="text-red-500 hover:underline not-italic font-semibold">
+                Who Should Buy
+              </a>{" "}
+              and{" "}
+              <a href="#amf-panel-honda" className="text-red-500 hover:underline not-italic font-semibold">
+                Applications
+              </a>{" "}
+              above for industries and use cases.
+            </p>
+          </div>
+        </section>
+
+        {/* ===== OTHER STUB SECTIONS ===== */}
         {PLACEHOLDER_STUBS.map((s) => (
           <section
             key={s.id}
