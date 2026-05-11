@@ -27,6 +27,7 @@ type AmfVariant = {
   specs: Spec[];
   highlights?: string[]; // variant-specific extras (added on top of shared)
   image: string; // expected image path (placeholder if missing)
+  hasImage?: boolean; // flip to true once the real PNG is in public/images/products/
   enquirySubject: string;
 };
 
@@ -71,6 +72,7 @@ const AMF_VARIANTS: AmfVariant[] = [
       { label: "Mains Input", value: "Single Phase / Three Phase" },
     ],
     image: "/images/products/amf-honda-40a.png",
+    hasImage: true,
     enquirySubject: "AMF Panel — 40A EU30iS (3-Pole) enquiry",
   },
   {
@@ -522,7 +524,18 @@ export default function PowerEnergyPage() {
                 >
                   {/* Image / placeholder */}
                   <div className="p-4 bg-[#fafafa] border-b border-[#ececec]">
-                    <ProductPlaceholder name={v.shortName} compact />
+                    {v.hasImage ? (
+                      <div className="aspect-[4/3] w-full rounded-2xl bg-white flex items-center justify-center overflow-hidden">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={v.image}
+                          alt={v.name}
+                          className="max-w-full max-h-full object-contain p-2"
+                        />
+                      </div>
+                    ) : (
+                      <ProductPlaceholder name={v.shortName} compact />
+                    )}
                   </div>
                   {/* Card body */}
                   <div className="p-6 flex flex-col flex-1">
@@ -863,22 +876,34 @@ export default function PowerEnergyPage() {
             THREE PHASE MOTOR STARTER — Gold Series DOL
             ============================================================ */}
         <section id="three-phase-motor-starter" className="scroll-mt-24 mb-24">
-          <div className="max-w-3xl mb-10">
-            <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-red-500 mb-3">
-              Three Phase Motor Starter · Fully Automatic
-            </p>
-            <h2 className="text-[clamp(28px,3.6vw,42px)] font-bold tracking-[-0.02em] text-[#0D0D0D] mb-3 leading-[1.1]">
-              {PEM_HERO.headline}
-            </h2>
-            <p className="text-[14px] font-semibold uppercase tracking-[0.14em] text-red-500 mb-5">
-              {PEM_HERO.tagline}
-            </p>
-            <p className="text-[#3a3a3a] text-[16px] leading-[1.7] mb-4">
-              {PEM_HERO.intro}
-            </p>
-            <p className="text-[#5a5a5a] text-[15px] leading-[1.7]">
-              {PEM_HERO.longIntro}
-            </p>
+          <div className="grid lg:grid-cols-[1.1fr,1fr] gap-10 items-start mb-10">
+            {/* Copy */}
+            <div>
+              <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-red-500 mb-3">
+                Three Phase Motor Starter · Fully Automatic
+              </p>
+              <h2 className="text-[clamp(28px,3.6vw,42px)] font-bold tracking-[-0.02em] text-[#0D0D0D] mb-3 leading-[1.1]">
+                {PEM_HERO.headline}
+              </h2>
+              <p className="text-[14px] font-semibold uppercase tracking-[0.14em] text-red-500 mb-5">
+                {PEM_HERO.tagline}
+              </p>
+              <p className="text-[#3a3a3a] text-[16px] leading-[1.7] mb-4">
+                {PEM_HERO.intro}
+              </p>
+              <p className="text-[#5a5a5a] text-[15px] leading-[1.7]">
+                {PEM_HERO.longIntro}
+              </p>
+            </div>
+            {/* Product photo */}
+            <div className="bg-white border border-[#ececec] rounded-2xl p-6 flex items-center justify-center">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/products/gold-dol.png"
+                alt="Subtech Gold Series DOL Three Phase Motor Starter — Remote Trip, No MCB"
+                className="max-w-full h-auto max-h-[360px] object-contain"
+              />
+            </div>
           </div>
 
           {/* Who should buy this specific product (Gold Series) */}
