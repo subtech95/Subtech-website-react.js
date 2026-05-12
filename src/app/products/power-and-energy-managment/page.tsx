@@ -119,6 +119,7 @@ const AMF_VARIANTS: AmfVariant[] = [
       "Recommended for hospitals, data centers and sensitive equipment",
     ],
     image: "/images/products/amf-honda-63a-4p.png",
+    hasImage: true,
     enquirySubject: "AMF Panel — 63A EU70iS (4-Pole) enquiry",
   },
 ];
