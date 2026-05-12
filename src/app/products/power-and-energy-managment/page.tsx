@@ -212,6 +212,7 @@ type AtsVariant = {
   blurb: string;
   specs: Spec[];
   image: string;
+  hasImage?: boolean;
   enquirySubject: string;
 };
 
@@ -231,6 +232,7 @@ const ATS_VARIANTS: AtsVariant[] = [
       { label: "Genset Range", value: "1 to 3 kVA" },
     ],
     image: "/images/products/ats-40a-ign-1ph-dp.png",
+    hasImage: true,
     enquirySubject: "Automatic Changeover — 40A IGN (1-Ph DP) enquiry",
   },
 ];
@@ -727,7 +729,18 @@ export default function PowerEnergyPage() {
                   className="scroll-mt-24 bg-white border border-[#ececec] rounded-2xl overflow-hidden flex flex-col"
                 >
                   <div className="p-4 bg-[#fafafa] border-b border-[#ececec]">
-                    <ProductPlaceholder name={v.shortName} compact />
+                    {v.hasImage ? (
+                      <div className="aspect-[4/3] w-full rounded-2xl bg-white flex items-center justify-center overflow-hidden">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={v.image}
+                          alt={v.name}
+                          className="max-w-full max-h-full object-contain p-2"
+                        />
+                      </div>
+                    ) : (
+                      <ProductPlaceholder name={v.shortName} compact />
+                    )}
                   </div>
                   <div className="p-6 flex flex-col flex-1">
                     <h4 className="text-[16px] font-bold text-[#0D0D0D] mb-2 leading-snug">
