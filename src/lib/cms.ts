@@ -110,7 +110,14 @@ export async function getProduct(slugOrId: string): Promise<Product | null> {
 // ── Blog ──────────────────────────────────────────────────────────────────────
 
 export async function getBlogCategories(): Promise<BlogCategory[]> {
-  return getJson<BlogCategory[]>("/api/public/blog-categories");
+  // Don't crash the whole page if the CRM is having a moment — show an empty
+  // filter row instead. Errors are logged to the server console for ops.
+  try {
+    return await getJson<BlogCategory[]>("/api/public/blog-categories");
+  } catch (err) {
+    console.error("[cms] getBlogCategories failed:", (err as Error).message);
+    return [];
+  }
 }
 
 export type BlogQuery = {
@@ -119,6 +126,14 @@ export type BlogQuery = {
   search?: string;
   page?: number;
   perPage?: number;
+};
+
+const EMPTY_BLOG_LIST: BlogListResponse = {
+  posts: [],
+  total: 0,
+  page: 1,
+  per_page: 0,
+  total_pages: 0,
 };
 
 export async function getBlogPosts(
@@ -131,7 +146,18 @@ export async function getBlogPosts(
   if (q.page && q.page > 1) qs.set("page", String(q.page));
   if (q.perPage) qs.set("per_page", String(q.perPage));
   const suffix = qs.toString() ? `?${qs.toString()}` : "";
-  return getJson<BlogListResponse>(`/api/public/blogs${suffix}`);
+  // Fail soft: if the CRM endpoint blows up (500, bad payload, network),
+  // serve an empty result so the blog page renders with a friendly empty
+  // state instead of a server-side exception page.
+  try {
+    return await getJson<BlogListResponse>(`/api/public/blogs${suffix}`);
+  } catch (err) {
+    console.error(
+      "[cms] getBlogPosts failed, returning empty list:",
+      (err as Error).message,
+    );
+    return { ...EMPTY_BLOG_LIST, page: q.page ?? 1, per_page: q.perPage ?? 0 };
+  }
 }
 
 /**
