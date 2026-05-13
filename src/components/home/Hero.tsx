@@ -46,7 +46,7 @@ export default function Hero() {
           animate="visible"
         >
           <motion.p variants={itemVariants} className="caption text-red-500 mb-6 font-medium">
-            Est. 1998 | Faridabad, India
+            Est. 1998 | Greater Noida, India
           </motion.p>
           
           <motion.h1 variants={itemVariants} className="mb-6 lg:mr-12">

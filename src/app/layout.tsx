@@ -17,16 +17,16 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "Subtech | Industrial Motor Protection Panels | Faridabad",
-  description: "Subtech manufactures VFD panels, AMF panels, MCC panels and motor starters. Trusted by GAIL, NTPC, DMRC. Est. 1998, Faridabad.",
-  keywords: "motor starter India, VFD panel manufacturer, AMF panel supplier, MCC panel, Industrial control panels, Subtech Faridabad",
+  title: "Subtech | Industrial Motor Protection Panels | Greater Noida",
+  description: "Subtech manufactures VFD panels, AMF panels, MCC panels and motor starters. Trusted by GAIL, NTPC, DMRC. Est. 1998, Greater Noida.",
+  keywords: "motor starter India, VFD panel manufacturer, AMF panel supplier, MCC panel, Industrial control panels, Subtech Greater Noida",
   openGraph: {
     type: "website",
     locale: "en_IN",
     url: "https://www.subtech.in",
     siteName: "Subtech",
-    title: "Subtech | Industrial Motor Protection Panels | Faridabad",
-    description: "Subtech manufactures VFD panels, AMF panels, MCC panels and motor starters. Trusted by GAIL, NTPC, DMRC. Est. 1998, Faridabad.",
+    title: "Subtech | Industrial Motor Protection Panels | Greater Noida",
+    description: "Subtech manufactures VFD panels, AMF panels, MCC panels and motor starters. Trusted by GAIL, NTPC, DMRC. Est. 1998, Greater Noida.",
     images: [
       {
         url: "https://www.subtech.in/logos/big logo.svg", // Fallback to logo or replace with a real OG image later
@@ -59,8 +59,10 @@ const jsonLd = {
   },
   address: {
     "@type": "PostalAddress",
-    addressLocality: "Faridabad",
-    addressRegion: "Haryana",
+    streetAddress: "271, Udyog Kendra II, Ecotech III",
+    addressLocality: "Greater Noida",
+    addressRegion: "Uttar Pradesh",
+    postalCode: "201306",
     addressCountry: "India"
   }
 };
