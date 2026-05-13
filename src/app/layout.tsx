@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { DM_Sans, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
@@ -91,6 +92,8 @@ export default function RootLayout({
         <Navbar />
         <main>{children}</main>
         <Footer />
+        {/* Subtech AI chat widget (legacy PHP, proxied via nginx to subtech-website droplet) */}
+        <Script src="/chat-widget.js" strategy="lazyOnload" />
       </body>
     </html>
   );
