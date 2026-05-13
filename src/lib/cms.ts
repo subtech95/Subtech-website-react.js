@@ -33,14 +33,21 @@ export const REVALIDATE_SECONDS = 300;
 /**
  * Convert a CMS image path to a fully-qualified URL.
  *
- * The CRM stores images as relative paths like `/uploads/website/cms/foo.png`.
- * We prefix them with the CMS origin so `<Image>` and `<img src>` work directly.
- * Absolute URLs (http/https) and data: URLs are passed through unchanged.
+ * The CRM stores images in three shapes historically:
+ *   1. Full absolute URL  → "https://…/foo.png"           (return unchanged)
+ *   2. Rooted path        → "/uploads/website/cms/foo.png" (prepend origin)
+ *   3. Bare filename      → "49.png"                       (legacy PHP blog posts;
+ *                                                            actually live at
+ *                                                            /uploads/website/cms/)
+ * We auto-resolve (3) to (2) so older blog cards show their images instead of
+ * getting a 200-OK-HTML response from the CRM's catch-all route.
  */
 export function imageUrl(src: string | null | undefined): string | null {
   if (!src) return null;
   if (/^(https?:|data:)/i.test(src)) return src;
-  return `${CMS_BASE_URL}${src.startsWith("/") ? "" : "/"}${src}`;
+  if (src.startsWith("/")) return `${CMS_BASE_URL}${src}`;
+  // Bare filename — assume CMS uploads folder
+  return `${CMS_BASE_URL}/uploads/website/cms/${src}`;
 }
 
 async function getJson<T>(
