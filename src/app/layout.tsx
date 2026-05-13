@@ -22,10 +22,10 @@ export const metadata: Metadata = {
   keywords: "motor starter India, VFD panel manufacturer, AMF panel supplier, MCC panel, Industrial control panels, Subtech Greater Noida",
   icons: {
     icon: [
-      { url: "/images/subtech.png", type: "image/png" },
+      { url: "/images/favicon.png", type: "image/png" },
     ],
-    shortcut: "/images/subtech.png",
-    apple: "/images/subtech.png",
+    shortcut: "/images/favicon.png",
+    apple: "/images/favicon.png",
   },
   openGraph: {
     type: "website",
