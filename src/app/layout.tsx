@@ -20,6 +20,13 @@ export const metadata: Metadata = {
   title: "Subtech | Industrial Motor Protection Panels | Greater Noida",
   description: "Subtech manufactures VFD panels, AMF panels, MCC panels and motor starters. Trusted by GAIL, NTPC, DMRC. Est. 1998, Greater Noida.",
   keywords: "motor starter India, VFD panel manufacturer, AMF panel supplier, MCC panel, Industrial control panels, Subtech Greater Noida",
+  icons: {
+    icon: [
+      { url: "/images/subtech.png", type: "image/png" },
+    ],
+    shortcut: "/images/subtech.png",
+    apple: "/images/subtech.png",
+  },
   openGraph: {
     type: "website",
     locale: "en_IN",
