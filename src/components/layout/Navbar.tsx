@@ -43,6 +43,7 @@ const PRODUCT_DATA: ProductGroup[] = [
         name: "Three Phase Motor Starter",
         slug: "three-phase-motor-starter",
         items: [
+          { name: "Standard", href: "/products/motor-control-solutions/three-phase-motor-starter/standard" },
           { name: "Fully Automatic", href: "/products/motor-control-solutions/three-phase-motor-starter/fully-automatic" },
           { name: "Advanced DOL", href: "/products/motor-control-solutions/three-phase-motor-starter/advanced-dol" },
           { name: "4G / GSM", href: "/products/motor-control-solutions/three-phase-motor-starter/4g-gsm" },

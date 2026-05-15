@@ -388,6 +388,40 @@ const SHARED_3PH_PROTECTIONS = [
   "Dry Run Protection (Optional)",
 ];
 
+const standardThreePhaseSeries: Series = {
+  slug: "standard-three-phase",
+  name: "Standard Smart Three Phase Panel",
+  tagline: "Smart digital control panel for everyday three-phase motors",
+  image: "/images/products/three-phase-standard.png",
+  description:
+    "A dependable, no-frills three-phase smart control panel with digital metering, MCB protection and PMC contactor switching. Built for everyday industrial and agricultural motors that need reliable control without the extras.",
+  longDescription:
+    "Includes a smart digital display showing voltage, current and run hours. Single push-button operation with knob-based settings, MCB inside for short-circuit and overload protection, PMC contactor for smooth switching, compact wall-mount GPSP enclosure.",
+  features: [
+    ...SHARED_3PH_FEATURES,
+    "Smart digital display (V / A / Run hours)",
+    "Inbuilt MCB protection",
+    "Single push-button operation",
+    "Compact wall-mount design",
+    "GPSP sheet enclosure, powder-coated rust-proof",
+    "Heavy-duty DMC connection terminals",
+  ],
+  protections: SHARED_3PH_PROTECTIONS,
+  addOns: ADDONS_COMMON,
+  variants: [
+    { ref: "STD1",  hp: "1",    kw: "0.75", relayRange: "2-10",  size: "300*225*110", weight: "3.5", mrp: "On Request" },
+    { ref: "STD3",  hp: "3",    kw: "2.2",  relayRange: "3-15",  size: "300*225*110", weight: "3.5", mrp: "On Request" },
+    { ref: "STD5",  hp: "5",    kw: "3.7",  relayRange: "5-20",  size: "300*225*110", weight: "3.5", mrp: "On Request" },
+    { ref: "STD7",  hp: "7.5",  kw: "5.5",  relayRange: "10-25", size: "300*225*110", weight: "3.5", mrp: "On Request" },
+    { ref: "STD10", hp: "10",   kw: "7.5",  relayRange: "15-35", size: "300*225*110", weight: "4.0", mrp: "On Request" },
+    { ref: "STD15", hp: "15",   kw: "11",   relayRange: "20-45", size: "350*270*120", weight: "5.5", mrp: "On Request" },
+    { ref: "STD20", hp: "20",   kw: "15",   relayRange: "25-50", size: "350*270*120", weight: "5.5", mrp: "On Request" },
+    { ref: "STD30", hp: "30",   kw: "22",   relayRange: "40-75", size: "450*400*130", weight: "8.0", mrp: "On Request" },
+  ],
+  variantTags: ["DOL", "Smart Digital"],
+  hpRange: ["1", "3", "5", "7.5", "10", "15", "20", "30"],
+};
+
 const kisanDolSeries: Series = {
   slug: "kisan-dol",
   name: "Kisan Series — DOL",
@@ -938,6 +972,13 @@ export const CATALOG: Category[] = [
         description:
           "Three-phase smart motor control panels — DOL and Star Delta — with our patented MPU controller and PMC contactor.",
         types: [
+          {
+            slug: "standard",
+            name: "Standard",
+            description:
+              "Standard three-phase smart control panels — reliable, simple, and built for everyday industrial and agricultural use.",
+            series: [standardThreePhaseSeries],
+          },
           {
             slug: "fully-automatic",
             name: "Fully Automatic",
