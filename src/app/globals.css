@@ -556,3 +556,57 @@
   .ft2-legal { flex-direction: column; align-items: center; }
   .ft2-legal li a { border-right: none; }
 }
+
+/* ── Chat widget greeting bubble ─────────────────────────────────────
+   chat-widget.js injects a <div class="cw-greeting"> "Hi there!" prompt,
+   but the accompanying chat-widget.css has no .cw-greeting rules — so
+   without these overrides it falls into document flow at the bottom-
+   left as a stray "×" + text. Position it as a floating chip above the
+   FAB. */
+.cw-greeting {
+  position: fixed !important;
+  bottom: 100px !important;
+  right: 24px !important;
+  background: #fff;
+  border-radius: 16px;
+  padding: 14px 38px 14px 18px;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.14);
+  max-width: 280px;
+  z-index: 9997;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  animation: cw-greet-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.cw-greeting-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+  line-height: 1.35;
+}
+.cw-greeting-sub {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+.cw-greeting-close {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  line-height: 1;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.18s;
+}
+.cw-greeting-close:hover { color: #1a1a1a; }
+@keyframes cw-greet-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+/* Hide greeting on small screens — only the FAB bubble shows */
+@media (max-width: 480px) {
+  .cw-greeting { display: none; }
+}
