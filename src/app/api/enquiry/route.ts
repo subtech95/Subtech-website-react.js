@@ -36,8 +36,9 @@ const FORWARD_BASE = (
   process.env.ENQUIRY_FORWARD_BASE ?? "https://crm.subtech.in"
 ).replace(/\/+$/, "");
 
-const ENQUIRIES_URL       = `${FORWARD_BASE}/api/public/enquiries`;
-const SERVICE_REQUEST_URL = `${FORWARD_BASE}/api/public/service-requests`;
+const ENQUIRIES_URL          = `${FORWARD_BASE}/api/public/enquiries`;
+const SERVICE_REQUEST_URL    = `${FORWARD_BASE}/api/public/service-requests`;
+const CAREER_APPLICATIONS_URL = `${FORWARD_BASE}/api/public/career-applications`;
 
 type Payload = Record<string, string>;
 
@@ -63,7 +64,40 @@ function pickEndpoint(payload: Payload): string {
   if (m === "complains" || m === "complaint" || m === "service") {
     return SERVICE_REQUEST_URL;
   }
+  if (m === "jobapply" || m === "apply" || m === "career") {
+    return CAREER_APPLICATIONS_URL;
+  }
   return ENQUIRIES_URL;
+}
+
+/**
+ * Translate the website's legacy careers-form field names to the new CRM's
+ * /api/public/career-applications JSON shape. The website's form uses
+ * `data_id` for job id, `subject` for the job title, `c_type` for LinkedIn,
+ * and stuffs experience/message into a few different fields. We bundle all
+ * the context into `cover_letter` so nothing is lost — the recruiter sees
+ * the full submission in the CRM admin.
+ */
+function transformForCareerApplications(payload: Payload): Payload {
+  const pieces: string[] = [];
+  if (payload.subject)  pieces.push(`Position applied for: ${payload.subject}`);
+  if (payload.message)  pieces.push(`Experience: ${payload.message}`);
+  if (payload.c_type)   pieces.push(`LinkedIn: ${payload.c_type}`);
+  if (payload.address)  pieces.push(`Message:\n${payload.address}`);
+  if (payload.job)      pieces.push(`Department: ${payload.job}`);
+  // Note about the resume — the proxy converts FormData to JSON and drops
+  // File entries, so the resume binary isn't actually attached here. Flag
+  // it in the cover letter so admins know to ask the candidate for it.
+  pieces.push("[Resume was attached on the website form — please request a copy from the candidate.]");
+
+  return {
+    job_id:       payload.data_id || payload.job_id || "",
+    name:         payload.name    || "",
+    email:        payload.email   || "",
+    mobile:       payload.mobile  || payload.phone || "",
+    cover_letter: pieces.join("\n\n"),
+    source:       payload.source  || "earth.subtech.in",
+  };
 }
 
 async function forwardJson(url: string, payload: Payload): Promise<{
@@ -153,7 +187,12 @@ export async function POST(req: Request) {
 
   // ── 3. Forward to the right CRM endpoint ───────────────────────────────
   const url = pickEndpoint(payload);
-  const fwd = await forwardJson(url, payload);
+  // Career applications need their fields re-shaped because the website
+  // form uses legacy names (data_id, subject, c_type, address) that don't
+  // map directly to the new CRM's career-applications endpoint.
+  const bodyToSend =
+    url === CAREER_APPLICATIONS_URL ? transformForCareerApplications(payload) : payload;
+  const fwd = await forwardJson(url, bodyToSend);
 
   if (!fwd.ok) {
     console.warn(
